@@ -12,6 +12,7 @@
       <th>توضیحات</th>
       <th>قیمت</th>
       <th>فعال</th>
+      <th>ویرایش</th>
    </tr>
 
    {% for p in product %}
@@ -20,11 +21,10 @@
       <td>{{p.description}}</td>
       <td>{{p.price}}</td>
       <td>{{p.active}}</td>
+      <td><a href="/admin/dashboard/edit-product/{{ p.id }}">ویرایش</a></td>
    </tr>
    {% endfor %}
 </table>
-
-
 <form action="/admin/dashboard/products" method="post"> <input type="text" name="name" placeholder="نام محصول"><br>
    <textarea name="description" placeholder="توضیحات"></textarea><br>
    <input type="number" name="price"placeholder="قیمت محصول"><br>
