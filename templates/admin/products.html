@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<title>admin product</title>
+{% endblock %}
+
+{% block body %}
+
+<table>
+   <tr>
+      <th>اسم</th>
+      <th>توضیحات</th>
+      <th>قیمت</th>
+      <th>فعال</th>
+   </tr>
+
+   {% for p in product %}
+   <tr>
+      <td>{{p.name}}</td>
+      <td>{{p.description}}</td>
+      <td>{{p.price}}</td>
+      <td>{{p.active}}</td>
+   </tr>
+   {% endfor %}
+</table>
+
+
+<form action="/admin/dashboard/products" method="post"> <input type="text" name="name" placeholder="نام محصول"><br>
+   <textarea name="description" placeholder="توضیحات"></textarea><br>
+   <input type="number" name="price"placeholder="قیمت محصول"><br>
+   <label>فعال:</label><input value="1" type="checkbox" name="active">
+   <input type="submit">
+</form>
+
+{% endblock %}
