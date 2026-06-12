@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_wtf.csrf import CSRFProtect
 from blueprins.general import app as general
 from blueprins.admin import app as admin
 from blueprins.user import app as user
@@ -16,6 +17,7 @@ app.config['SECRET_KEY'] = config.SECRET_KEY
 
 
 db.init_app(app)
+csrf = CSRFProtect(app)
 
 with app.app_context():
     db.create_all()

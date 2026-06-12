@@ -26,8 +26,9 @@
    {% endfor %}
 </table>
 <form action="/admin/dashboard/products" method="post"> <input type="text" name="name" placeholder="نام محصول"><br>
+   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
    <textarea name="description" placeholder="توضیحات"></textarea><br>
-   <input type="number" name="price"placeholder="قیمت محصول"><br>
+   <input type="number" name="price" placeholder="قیمت محصول"><br>
    <label>فعال:</label><input value="1" type="checkbox" name="active">
    <input type="submit">
 </form>
