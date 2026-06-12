@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<title>فروشگاه اینترنتی | OREN </title>
+{% endblock %}
+
+{% block body %}
+
+{% for p in products %}
+
+    {{p.name}}
+
+{% endfor %}
+
+{% endblock %} 
