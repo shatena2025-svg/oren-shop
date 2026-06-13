@@ -5,8 +5,9 @@
 {% endblock %}
 
 {% block body %}
+
+<h1>ثبت نام</h1>
 <form action="#" method="post">
-    <h1>ورود | ثبت نام</h1>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
     <input type="hidden" name="register" value="1">
     <input type="text" name="username" placeholder="username"><br>
@@ -15,4 +16,17 @@
     <input type="text" name="address" placeholder="address"><br>
     <input type="submit" value="ثبت">
 </form>
+
+{%  for m in get_flashed_messages()  %}
+{{ m }}
+{% endfor %}
+
+<h1>ورود</h1>
+<form action="#" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <input type="text" name="username" placeholder="username"><br>
+    <input type="password" name="password" placeholder="password"><br>
+    <input type="submit" value="ثبت">
+</form>
+
 {% endblock %}
