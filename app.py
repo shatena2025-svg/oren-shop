@@ -1,8 +1,10 @@
 from flask import Flask
 from flask_wtf.csrf import CSRFProtect
+from flask_login import LoginManager
 from blueprins.general import app as general
 from blueprins.admin import app as admin
 from blueprins.user import app as user
+from models.user import User
 from extentions import db
 import config
 
@@ -14,6 +16,12 @@ app.register_blueprint(user)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
 app.config['SECRET_KEY'] = config.SECRET_KEY   
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.filter(User.id == user_id).first()
 
 
 db.init_app(app)

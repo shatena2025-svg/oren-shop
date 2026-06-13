@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, Text  
 from extentions import db
+from flask_login import UserMixin
 
-class User(db.Model):
+class User(db.Model,UserMixin):
     __allow_unmapped__ = True  
     __tablename__ = 'users'
     
