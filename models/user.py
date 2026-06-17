@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text  
+from sqlalchemy import *
 from extentions import db
 from flask_login import UserMixin
 
