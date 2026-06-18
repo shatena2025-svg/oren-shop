@@ -1,5 +1,7 @@
 from sqlalchemy import *  
 from extentions import db
+from extentions import db , get_current_time
+
 
 class Product(db.Model):
     __allow_unmapped__ = True  
@@ -10,3 +12,5 @@ class Product(db.Model):
     description = Column(Text, nullable=False) 
     price = Column(Integer, nullable=False, index=True)
     active = Column(Integer, nullable=False, index=True)
+    date_created = Column(String(15), default=get_current_time) 
+

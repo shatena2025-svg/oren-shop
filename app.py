@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,redirect,url_for,flash
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
 from blueprins.general import app as general
@@ -23,6 +23,10 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.filter(User.id == user_id).first()
 
+@login_manager.unauthorized_handler
+def unauthorized():
+    flash('وارد حساب کاربریتان شوید')
+    return redirect(url_for('user.login'))
 
 db.init_app(app)
 csrf = CSRFProtect(app)
