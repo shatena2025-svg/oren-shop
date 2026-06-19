@@ -1,6 +1,7 @@
 from flask import Blueprint,render_template,request,redirect,session,abort,url_for
 import config
 from models.product import Product
+from models.cart import Cart
 from extentions import db
 
 app = Blueprint('admin',__name__ , url_prefix='/admin')
@@ -25,10 +26,22 @@ def login():
         else:
             return render_template('admin/login.html')
 
-@app.route('/dashboard',methods=["GET"])
+@app.route('/dashboard')
 def dashboard():
+    carts = Cart.query.filter(Cart.status != 'pending').all()
+    return render_template('admin/dashboard.html', carts=carts) 
 
-    return render_template('admin/dashboard.html')
+@app.route('/dashboard/order/<id>', methods=['GET','POST'])
+def order(id):
+    cart = Cart.query.filter(Cart.id == id).first_or_404()
+    if request.method == 'GET':
+        return render_template('admin/order.html', cart=cart) 
+    else:
+        status = request.form.get('status')
+        cart.status = status
+        db.session.commit()
+        return redirect(url_for('admin.order',id=id))
+        
 
 @app.route('/dashboard/products',methods=["GET","POST"])
 def products():

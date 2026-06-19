@@ -6,6 +6,6 @@
 
 {% block body %}
 {% for cart in current_user.carts|selectattr('status','!=','pending') %}
-      <a href="{{ url_for('user.order', id=cart.id) }}"> سفارش  {{ cart.id }} - {{ cart.status }}</a><br>
+      <a href="{{ url_for('user.order', id=cart.id) }}"> سفارش  {{ cart.id }} - {{ cart.get_status_pertion() }}</a><br>
     {% endfor %}
 {% endblock %}
