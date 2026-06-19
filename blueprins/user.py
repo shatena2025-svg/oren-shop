@@ -51,10 +51,10 @@ def login():
 
 
 
-@app.route('/add-to-cart', methods=['GET'])
+@app.route('/add-to-cart', methods=['POST'])
 @login_required
 def add_to_cart():
-    id = request.args.get('id')
+    id = request.form.get('id')
     product = Product.query.filter(Product.id == id).first_or_404()
 
     cart = current_user.carts.filter(Cart.status == 'pending').first()
@@ -78,10 +78,10 @@ def add_to_cart():
     return redirect(url_for('user.cart'))
 
 
-@app.route('/remove-from-cart', methods=['GET'])
+@app.route('/remove-from-cart', methods=['POST'])
 @login_required
 def remove_from_cart():
-    id = request.args.get('id')
+    id = request.form.get('id')
     cart_item = CartItem.query.filter(CartItem.id == id).first_or_404()
     if cart_item.quantity > 1:
         cart_item.quantity -= 1
@@ -98,7 +98,7 @@ def cart():
     cart = current_user.carts.filter(Cart.status == "pending").first()
     return render_template('user/cart.html', cart=cart)
 
-@app.route('/payment',methods=['GET'])  
+@app.route('/payment',methods=['POST'])  
 @login_required
 def payment():
     cart = current_user.carts.filter(Cart.status == 'pending').first()

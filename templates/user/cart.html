@@ -1,26 +1,30 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <title>سبد خرید کاربر</title>
+<title>سبد خرید کاربر</title>
 {% endblock %}
 
 {% block body %}
 
-    {% if cart != None and cart.cart_items|list|length > 0 %}
+{% if cart != None and cart.cart_items|list|length > 0 %}
 
-        {% for cart_item in cart.cart_items %}
-            {{ cart_item.product.name }} , {{ cart_item.quantity }} , {{ cart_item.product.price }}
-            <form action="/remove-from-cart" method="get">
-                <input type="hidden" name="id" value="{{ cart_item.id }}">
-                <input type="submit" value="حذف">
-            </form>
-        {% endfor %}
+{% for cart_item in cart.cart_items %}
+{{ cart_item.product.name }} , {{ cart_item.quantity }} , {{ cart_item.product.price }}
+<form action="/remove-from-cart" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="id" value="{{ cart_item.id }}">
+    <input type="submit" value="حذف">
+</form>
+{% endfor %}
 
-        <b>قیمت کل : {{ cart.total_price() }} تومان</b>
-        <a href="/payment">پرداخت</a>
-        
-    {% else %}
-        <h3>سبد خرید خالی است</h3>
-    {% endif %}
+<b>قیمت کل : {{ cart.total_price() }} تومان</b>
+<form method="POST" action="/payment">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit">پرداخت</button>
+</form>
+
+{% else %}
+<h3>سبد خرید خالی است</h3>
+{% endif %}
 
 {% endblock %}
