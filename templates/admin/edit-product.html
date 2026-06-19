@@ -1,19 +1,62 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<title>edit product</title>
+<title>ویرایش محصول</title>
 {% endblock %}
 
 {% block body %}
-<img style="width: 200px;" src="/static/cover/{{ product.id }}.jpg">
-<form action="#" method="post" enctype="multipart/form-data">
-   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-   <label>cover</label><input type="file" name="cover"><br>
-   <input type="text" value="{{ product.name }}" name="name" placeholder="نام محصول"><br>
-   <textarea name="description" placeholder="توضیحات">{{ product.description }}</textarea><br>
-   <input type="number" value="{{ product.price }}" name="price" placeholder="قیمت محصول"><br>
-   <label>فعال:</label><input value="1" type="checkbox" name="active" {{ "checked" if product.active == 1 }} ><br>
-   <input type="submit" value="ثبت تغییرات">
+
+<h2>ویرایش محصول: {{ product.name }}</h2>
+
+<hr>
+
+<h3>عکس‌های محصول:</h3>
+
+{% for img in images %}
+    <div>
+        <img style="width: 100px;" src="/static/cover/{{ img.image_path }}">
+        
+        {% if img.is_primary %}
+            <span>(عکس اصلی)</span>
+        {% else %}
+            <form action="/admin/dashboard/set-primary/{{ img.id }}" method="post" style="display: inline;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit">انتخاب به عنوان اصلی</button>
+            </form>
+        {% endif %}
+        
+        <form action="/admin/dashboard/delete-image/{{ img.id }}" method="post" style="display: inline;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit">حذف</button>
+        </form>
+    </div>
+    <br>
+{% endfor %}
+
+<hr>
+
+<form action="/admin/dashboard/edit-product/{{ product.id }}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    
+    <label>نام محصول:</label>
+    <input type="text" name="name" value="{{ product.name }}"><br><br>
+    
+    <label>توضیحات:</label><br>
+    <textarea name="description">{{ product.description }}</textarea><br><br>
+    
+    <label>قیمت:</label>
+    <input type="number" name="price" value="{{ product.price }}"><br><br>
+    
+    <label>فعال:</label>
+    <input type="checkbox" name="active" value="1" {% if product.active == 1 %}checked{% endif %}><br><br>
+    
+    <label>آپلود عکس جدید:</label>
+    <input type="file" name="images" multiple><br><br>
+    
+    <input type="submit" value="ذخیره تغییرات">
 </form>
+
+<br>
+<a href="/admin/dashboard/products">بازگشت به لیست محصولات</a>
 
 {% endblock %}

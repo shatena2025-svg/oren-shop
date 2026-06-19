@@ -1,5 +1,4 @@
 from sqlalchemy import *  
-from extentions import db
 from extentions import db , get_current_time
 
 
@@ -13,4 +12,6 @@ class Product(db.Model):
     price = Column(Integer, nullable=False, index=True)
     active = Column(Integer, nullable=False, index=True)
     date_created = Column(String(15), default=get_current_time) 
+    images = db.relationship('ProductImage', backref='product', lazy='dynamic')
+
 

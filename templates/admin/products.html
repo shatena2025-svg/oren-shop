@@ -18,7 +18,13 @@
 
    {% for p in product %}
    <tr>
-      <td><img style="width: 30px;" src="/static/cover/{{ p.id }}.jpg"></td>
+      <td>
+         {% if p.primary_image %}
+         <img style="width: 30px;" src="/static/cover/{{ p.primary_image }}">
+         {% else %}
+         <span style="color: gray;">بدون عکس</span>
+         {% endif %}
+      </td>
       <td>{{p.name}}</td>
       <td>{{p.description}}</td>
       <td>{{p.price}}</td>
@@ -27,9 +33,10 @@
    </tr>
    {% endfor %}
 </table>
-<form action="/admin/dashboard/products" method="post" enctype="multipart/form-data"> 
+<form action="/admin/dashboard/products" method="post" enctype="multipart/form-data">
    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-   <label>cover</label><input type="file" name="cover"></input><br>
+   <input type="number" name="primary_index" value="0" min="0">
+   <label>cover</label><input type="file" name="images" multiple> <br>
    <input type="text" name="name" placeholder="نام محصول"><br>
    <textarea name="description" placeholder="توضیحات"></textarea><br>
    <input type="number" name="price" placeholder="قیمت محصول"><br>
