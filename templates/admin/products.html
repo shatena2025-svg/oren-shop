@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<title>admin product</title>
+<title>مدیریت محصولات</title>
 {% endblock %}
 
 {% block body %}
@@ -10,7 +10,8 @@
    <tr>
       <th>تصویر</th>
       <th>اسم</th>
-      <th>توضیحات</th>
+      <th>جنسیت</th>
+      <th>دسته‌بندی</th>
       <th>قیمت</th>
       <th>فعال</th>
       <th>ویرایش</th>
@@ -26,22 +27,87 @@
          {% endif %}
       </td>
       <td>{{p.name}}</td>
-      <td>{{p.description}}</td>
+      <td>
+         {% if p.gender == 'male' %}
+            مردانه
+         {% else %}
+            زنانه
+         {% endif %}
+      </td>
+      <td>{{p.category}}</td>
       <td>{{p.price}}</td>
       <td>{{p.active}}</td>
       <td><a href="/admin/dashboard/edit-product/{{ p.id }}">ویرایش</a></td>
    </tr>
    {% endfor %}
 </table>
+
 <form action="/admin/dashboard/products" method="post" enctype="multipart/form-data">
    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-   <input type="number" name="primary_index" value="0" min="0">
-   <label>cover</label><input type="file" name="images" multiple> <br>
-   <input type="text" name="name" placeholder="نام محصول"><br>
-   <textarea name="description" placeholder="توضیحات"></textarea><br>
-   <input type="number" name="price" placeholder="قیمت محصول"><br>
-   <label>فعال:</label><input value="1" type="checkbox" name="active">
-   <input type="submit">
+   
+   <input type="text" name="name" placeholder="نام محصول" required><br>
+   <textarea name="short_description" placeholder="توضیح کوتاه"></textarea><br>
+   <textarea name="description" placeholder="توضیحات بلند"></textarea><br>
+   <input type="number" name="price" placeholder="قیمت محصول" required><br>
+   
+   <label>جنسیت:</label>
+   <select name="gender">
+      <option value="male">مردانه</option>
+      <option value="female">زنانه</option>
+      <option value="unisex" selected>اسپورت (مناسب برای همه)</option>
+   </select>
+   <br>
+   
+   <label>دسته‌بندی:</label>
+   <select name="category">
+      <option value="لباس">لباس</option>
+      <option value="شلوار">شلوار</option>
+      <option value="کفش">کفش</option>
+      <option value="تیشرت">تیشرت</option>
+      <option value="پیراهن">پیراهن</option>
+      <option value="کت">کت</option>
+      <option value="ژاکت">ژاکت</option>
+   </select>
+   <br>
+   
+   <label>فعال:</label>
+   <input value="1" type="checkbox" name="active"><br>
+   
+   <label>تصاویر:</label>
+   <input type="file" name="images" multiple><br>
+   
+   <h3>رنگ‌های محصول:</h3>
+   <div id="color-list">
+      <div class="color-item">
+         <input type="text" name="color_name[]" placeholder="اسم رنگ"><br>
+         <input type="text" name="color_code[]" placeholder="کد رنگ (مثلاً #FF0000)"><br>
+         <input type="number" name="stock[]" placeholder="موجودی"><br>
+         <input type="number" name="color_price[]" placeholder="قیمت (اختیاری)"><br>
+         <input type="file" name="color_images[]"><br>
+      </div>
+   </div>
+   <button type="button" onclick="addColor()">افزودن رنگ جدید</button>
+   <br><br>
+   
+   <input type="submit" value="افزودن محصول">
 </form>
+
+<script>
+   function addColor() {
+      var container = document.getElementById('color-list');
+      var newItem = document.createElement('div');
+      newItem.className = 'color-item';
+      newItem.innerHTML = `
+         <input type="text" name="color_name[]" placeholder="اسم رنگ"><br>
+         <input type="text" name="color_code[]" placeholder="کد رنگ (مثلاً #FF0000)"><br>
+         <input type="number" name="stock[]" placeholder="موجودی"><br>
+         <input type="number" name="color_price[]" placeholder="قیمت (اختیاری)"><br>
+         <input type="file" name="color_images[]"><br>
+         <button type="button" onclick="this.parentElement.remove()">حذف رنگ</button>
+         <hr>
+      `;
+      container.appendChild(newItem);
+   }
+</script>
 
 {% endblock %}

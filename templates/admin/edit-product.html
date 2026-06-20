@@ -13,50 +13,107 @@
 <h3>عکس‌های محصول:</h3>
 
 {% for img in images %}
-    <div>
-        <img style="width: 100px;" src="/static/cover/{{ img.image_path }}">
-        
-        {% if img.is_primary %}
-            <span>(عکس اصلی)</span>
-        {% else %}
-            <form action="/admin/dashboard/set-primary/{{ img.id }}" method="post" style="display: inline;">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <button type="submit">انتخاب به عنوان اصلی</button>
-            </form>
-        {% endif %}
-        
-        <form action="/admin/dashboard/delete-image/{{ img.id }}" method="post" style="display: inline;">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <button type="submit">حذف</button>
-        </form>
-    </div>
-    <br>
+<div>
+    <img style="width: 100px;" src="/static/cover/{{ img.image_path }}">
+
+    {% if img.is_primary %}
+    <span>(عکس اصلی)</span>
+    {% else %}
+    <form action="/admin/dashboard/set-primary/{{ img.id }}" method="post" style="display: inline;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit">انتخاب به عنوان اصلی</button>
+    </form>
+    {% endif %}
+
+    <form action="/admin/dashboard/delete-image/{{ img.id }}" method="post" style="display: inline;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit">حذف</button>
+    </form>
+</div>
+<br>
 {% endfor %}
 
 <hr>
 
 <form action="/admin/dashboard/edit-product/{{ product.id }}" method="post" enctype="multipart/form-data">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    
+
     <label>نام محصول:</label>
     <input type="text" name="name" value="{{ product.name }}"><br><br>
-    
+
     <label>توضیحات:</label><br>
     <textarea name="description">{{ product.description }}</textarea><br><br>
-    
+
     <label>قیمت:</label>
     <input type="number" name="price" value="{{ product.price }}"><br><br>
-    
+
+    <label>جنسیت:</label>
+    <select name="gender">
+        <option value="male" {% if product.gender=='male' %}selected{% endif %}>مردانه</option>
+        <option value="female" {% if product.gender=='female' %}selected{% endif %}>زنانه</option>
+        <option value="unisex" {% if product.gender=='unisex' %}selected{% endif %}>اسپورت (مناسب برای همه)</option>
+    </select>
+    <br><br>
+
+    <label>دسته‌بندی:</label>
+    <select name="category">
+        <option value="لباس" {% if product.category=='لباس' %}selected{% endif %}>لباس</option>
+        <option value="شلوار" {% if product.category=='شلوار' %}selected{% endif %}>شلوار</option>
+        <option value="کفش" {% if product.category=='کفش' %}selected{% endif %}>کفش</option>
+        <option value="تیشرت" {% if product.category=='تیشرت' %}selected{% endif %}>تیشرت</option>
+        <option value="پیراهن" {% if product.category=='پیراهن' %}selected{% endif %}>پیراهن</option>
+        <option value="کت" {% if product.category=='کت' %}selected{% endif %}>کت</option>
+        <option value="ژاکت" {% if product.category=='ژاکت' %}selected{% endif %}>ژاکت</option>
+    </select>
+    <br><br>
+
     <label>فعال:</label>
-    <input type="checkbox" name="active" value="1" {% if product.active == 1 %}checked{% endif %}><br><br>
-    
+    <input type="checkbox" name="active" value="1" {% if product.active==1 %}checked{% endif %}><br><br>
+
     <label>آپلود عکس جدید:</label>
     <input type="file" name="images" multiple><br><br>
-    
+
+    <h3>رنگ‌های موجود:</h3>
+    {% for color in product.colors %}
+    <div style="border:1px solid #ccc; padding:10px; margin:10px 0;">
+        <input type="hidden" name="color_id[]" value="{{ color.id }}">
+        <input type="text" name="color_name_{{ color.id }}" value="{{ color.color_name }}" placeholder="اسم رنگ"><br>
+        <input type="text" name="color_code_{{ color.id }}" value="{{ color.color_code }}" placeholder="کد رنگ"><br>
+        <input type="number" name="stock_{{ color.id }}" value="{{ color.stock }}" placeholder="موجودی"><br>
+        <input type="number" name="color_price_{{ color.id }}" value="{{ color.price }}" placeholder="قیمت"><br>
+        <button type="button" onclick="if(confirm('حذف شود؟')) this.parentElement.remove()">حذف رنگ</button>
+    </div>
+    {% endfor %}
+
+    <h3>افزودن رنگ جدید:</h3>
+    <div id="new-colors-container"></div>
+    <button type="button" onclick="addColor()">افزودن رنگ جدید</button>
+    <br><br>
+
     <input type="submit" value="ذخیره تغییرات">
 </form>
 
 <br>
 <a href="/admin/dashboard/products">بازگشت به لیست محصولات</a>
+
+<script>
+    function addColor() {
+        var container = document.getElementById('new-colors-container');
+        var newColor = document.createElement('div');
+        newColor.style.border = '1px solid #ccc';
+        newColor.style.padding = '10px';
+        newColor.style.margin = '10px 0';
+
+        newColor.innerHTML = `
+            <input type="text" name="new_color_name[]" placeholder="اسم رنگ"><br>
+            <input type="text" name="new_color_code[]" placeholder="کد رنگ"><br>
+            <input type="number" name="new_stock[]" placeholder="موجودی" value="0"><br>
+            <input type="number" name="new_color_price[]" placeholder="قیمت"><br>
+            <button type="button" onclick="this.parentElement.remove()">حذف</button>
+            <hr>
+        `;
+        container.appendChild(newColor);
+    }
+</script>
 
 {% endblock %}

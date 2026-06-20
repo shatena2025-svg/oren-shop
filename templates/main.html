@@ -8,7 +8,7 @@
 
 {% for p in products %}
 
-<a href="{{ url_for('general.product', id=p.id, name=p.name) }}">{{p.name}}</a>
+<a href="{{ url_for('general.product_detail', id=p.id, name=p.name) }}">{{p.name}}</a>
 {% endfor %}
 
 {% endblock %} 

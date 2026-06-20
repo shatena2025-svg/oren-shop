@@ -6,16 +6,62 @@
 
 {% block body %}
 
-<img style="width: 200px;" src="/static/cover/{{ product.id }}.jpg"><br>
-{{ product.id }}
+{% if product.primary_image %}
+    <img style="width: 200px;" src="/static/cover/{{ product.primary_image }}">
+{% else %}
+    <img style="width: 200px;" src="/static/cover/default.jpg">
+{% endif %}
+<br>
+
+{{ product.id }}<br>
 {{ product.name }}<br>
+
+<span>جنسیت: 
+    {% if product.gender == 'male' %}
+        مردانه
+    {% elif product.gender == 'female' %}
+        زنانه
+    {% else %}
+        اسپورت (مناسب برای همه)
+    {% endif %}
+</span><br>
+
+<span>دسته‌بندی: {{ product.category }}</span><br>
+
 {{ product.price }}<br>
 
-<form method="post" action="/add-to-cart">
-<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-<input type="hidden" name="id" value="{{ product.id }}">
-<input type="submit" value="اضافه کردن به صفحه ی خرید">
-</form>
+<h3>رنگ‌های موجود:</h3>
+{% if product.colors %}
+    <form method="post" action="/add-to-cart">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="id" value="{{ product.id }}">
+    
+    <select name="color_id" required>
+        <option value="">انتخاب رنگ</option>
+        {% for color in product.colors %}
+        <option value="{{ color.id }}">
+            {{ color.color_name }} 
+            {% if color.stock > 0 %}
+                (موجودی: {{ color.stock }})
+            {% else %}
+                (ناموجود)
+            {% endif %}
+        </option>
+        {% endfor %}
+    </select>
+    <br><br>
+    
+    <label>تعداد:</label>
+    <input type="number" name="quantity" value="1" min="1">
+    <br><br>
+    
+    <input type="submit" value="اضافه کردن به سبد خرید">
+    </form>
+{% else %}
+    <p style="color: red;">این محصول رنگی ندارد!</p>
+{% endif %}
 
+<br>
+<a href="/">بازگشت به صفحه اصلی</a>
 
-{% endblock %} 
+{% endblock %}

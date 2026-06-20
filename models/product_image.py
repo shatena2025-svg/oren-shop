@@ -12,4 +12,6 @@ class ProductImage(db.Model):
     is_primary = Column(Boolean, default=False)
     sort_order = Column(Integer, nullable=False)
     date_created = Column(String(15), default=get_current_time) 
+    
+    product = db.relationship('Product', back_populates='images')
 

@@ -2,6 +2,7 @@ from flask import Blueprint,render_template,request,redirect,session,abort,url_f
 import config
 from models.product import Product
 from models.product_image import ProductImage
+from models.productcolor import ProductColor
 from models.cart import Cart
 from extentions import db
 
@@ -59,11 +60,21 @@ def products():
         return render_template('admin/products.html', product=product)
     else:
         name = request.form.get('name', None)
+        short_description = request.form.get('short_description',None)
         description = request.form.get('description', None)  
         price = request.form.get('price', None)
         active = request.form.get('active', None)
+        gender = request.form.get('gender', 'female')
+        category = request.form.get('category', 'لباس')
 
-        p = Product(name=name, description=description, price=price)  
+        p = Product(
+            name=name,
+            short_description=short_description,
+            description=description,
+            price=price,
+            gender=gender,
+            category=category
+        )
         if active == None:
             p.active = 0
         else:
@@ -90,6 +101,26 @@ def products():
         
         if counter > 0:
             db.session.commit()        
+            
+        color_names = request.form.getlist('color_name[]')
+        color_codes = request.form.getlist('color_code[]')
+        stocks = request.form.getlist('stock[]')
+        color_prices = request.form.getlist('color_price[]')
+        color_images = request.files.getlist('color_images[]')
+
+        for i, name in enumerate(color_names):
+            if name:
+                color = ProductColor(
+                    product_id=p.id,
+                    color_name=name,
+                    color_code=color_codes[i] if i < len(color_codes) else None,
+                    stock=int(stocks[i]) if i < len(stocks) and stocks[i] else 0,
+                    price=int(color_prices[i]) if i < len(color_prices) and color_prices[i] else None,
+                    sort_order=i
+                )
+                db.session.add(color)
+                db.session.commit()
+
         return redirect(url_for('admin.products'))
 
     
@@ -105,7 +136,11 @@ def edit_product(id):
         price = request.form.get('price', None)
         active = request.form.get('active', None)
         file = request.files.get('cover', None)
+        gender = request.files.get('gender', None)
+        category = request.files.get('category', None)
         
+        product.gender = request.form.get('gender', 'female')
+        product.category = request.form.get('category', 'لباس')
         product.name = name
         product.description = description
         product.price = price
@@ -140,6 +175,33 @@ def edit_product(id):
         
         if counter > 0:
             db.session.commit()
+        
+        color_ids = request.form.getlist('color_id[]')
+        for color_id in color_ids:
+            color = ProductColor.query.get(color_id)
+            if color:
+                color.color_name = request.form.get(f'color_name_{color_id}')
+                color.color_code = request.form.get(f'color_code_{color_id}')
+                color.stock = int(request.form.get(f'stock_{color_id}') or 0)
+                color.price = int(request.form.get(f'color_price_{color_id}') or 0)
+        db.session.commit()
+        
+        new_color_names = request.form.getlist('new_color_name[]')
+        new_color_codes = request.form.getlist('new_color_code[]')
+        new_stocks = request.form.getlist('new_stock[]')
+        new_color_prices = request.form.getlist('new_color_price[]')
+        
+        for i, name in enumerate(new_color_names):
+            if name and name.strip():
+                color = ProductColor(
+                    product_id=product.id,
+                    color_name=name,
+                    color_code=new_color_codes[i] if i < len(new_color_codes) else None,
+                    stock=int(new_stocks[i]) if i < len(new_stocks) and new_stocks[i] else 0,
+                    price=int(new_color_prices[i]) if i < len(new_color_prices) and new_color_prices[i] else None
+                )
+                db.session.add(color)
+        db.session.commit()
         
         return redirect(url_for('admin.edit_product', id=id))
     
