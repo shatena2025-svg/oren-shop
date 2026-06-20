@@ -30,23 +30,41 @@
 
 {{ product.price }}<br>
 
-<h3>رنگ‌های موجود:</h3>
-{% if product.colors %}
-    <form method="post" action="/add-to-cart">
+<h3>رنگ و سایز موجود:</h3>
+<form method="post" action="/add-to-cart">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <input type="hidden" name="id" value="{{ product.id }}">
+    <input type="hidden" name="product_id" value="{{ product.id }}">
     
+    <label>رنگ:</label>
     <select name="color_id" required>
         <option value="">انتخاب رنگ</option>
         {% for color in product.colors %}
-        <option value="{{ color.id }}">
-            {{ color.color_name }} 
             {% if color.stock > 0 %}
-                (موجودی: {{ color.stock }})
+                <option value="{{ color.id }}">
+                    {{ color.color_name }} (موجودی: {{ color.stock }})
+                </option>
             {% else %}
-                (ناموجود)
+                <option value="{{ color.id }}" disabled>
+                    {{ color.color_name }} (ناموجود)
+                </option>
             {% endif %}
-        </option>
+        {% endfor %}
+    </select>
+    <br><br>
+    
+    <label>سایز:</label>
+    <select name="size_id" required>
+        <option value="">انتخاب سایز</option>
+        {% for size in product.sizes %}
+            {% if size.stock > 0 %}
+                <option value="{{ size.id }}">
+                    سایز {{ size.size }} (موجودی: {{ size.stock }})
+                </option>
+            {% else %}
+                <option value="{{ size.id }}" disabled>
+                    سایز {{ size.size }} (ناموجود)
+                </option>
+            {% endif %}
         {% endfor %}
     </select>
     <br><br>
@@ -56,10 +74,7 @@
     <br><br>
     
     <input type="submit" value="اضافه کردن به سبد خرید">
-    </form>
-{% else %}
-    <p style="color: red;">این محصول رنگی ندارد!</p>
-{% endif %}
+</form>
 
 <br>
 <a href="/">بازگشت به صفحه اصلی</a>

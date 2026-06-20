@@ -11,20 +11,17 @@
 <hr>
 
 <h3>عکس‌های محصول:</h3>
-
 {% for img in images %}
 <div>
     <img style="width: 100px;" src="/static/cover/{{ img.image_path }}">
-
     {% if img.is_primary %}
-    <span>(عکس اصلی)</span>
+        <span>(عکس اصلی)</span>
     {% else %}
-    <form action="/admin/dashboard/set-primary/{{ img.id }}" method="post" style="display: inline;">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button type="submit">انتخاب به عنوان اصلی</button>
-    </form>
+        <form action="/admin/dashboard/set-primary/{{ img.id }}" method="post" style="display: inline;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit">انتخاب به عنوان اصلی</button>
+        </form>
     {% endif %}
-
     <form action="/admin/dashboard/delete-image/{{ img.id }}" method="post" style="display: inline;">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button type="submit">حذف</button>
@@ -41,6 +38,9 @@
     <label>نام محصول:</label>
     <input type="text" name="name" value="{{ product.name }}"><br><br>
 
+    <label>توضیحات کوتاه:</label><br>
+    <textarea name="short_description">{{ product.short_description }}</textarea><br><br>
+
     <label>توضیحات:</label><br>
     <textarea name="description">{{ product.description }}</textarea><br><br>
 
@@ -52,8 +52,7 @@
         <option value="male" {% if product.gender=='male' %}selected{% endif %}>مردانه</option>
         <option value="female" {% if product.gender=='female' %}selected{% endif %}>زنانه</option>
         <option value="unisex" {% if product.gender=='unisex' %}selected{% endif %}>اسپورت (مناسب برای همه)</option>
-    </select>
-    <br><br>
+    </select><br><br>
 
     <label>دسته‌بندی:</label>
     <select name="category">
@@ -64,8 +63,7 @@
         <option value="پیراهن" {% if product.category=='پیراهن' %}selected{% endif %}>پیراهن</option>
         <option value="کت" {% if product.category=='کت' %}selected{% endif %}>کت</option>
         <option value="ژاکت" {% if product.category=='ژاکت' %}selected{% endif %}>ژاکت</option>
-    </select>
-    <br><br>
+    </select><br><br>
 
     <label>فعال:</label>
     <input type="checkbox" name="active" value="1" {% if product.active==1 %}checked{% endif %}><br><br>
@@ -90,6 +88,30 @@
     <button type="button" onclick="addColor()">افزودن رنگ جدید</button>
     <br><br>
 
+    <h3>سایزهای موجود:</h3>
+    {% set selected_sizes = product.sizes|map(attribute='size')|list %}
+    
+    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin: 10px 0;">
+        <label><input type="checkbox" name="sizes[]" value="S" {% if 'S' in selected_sizes %}checked{% endif %}> S</label>
+        <label><input type="checkbox" name="sizes[]" value="M" {% if 'M' in selected_sizes %}checked{% endif %}> M</label>
+        <label><input type="checkbox" name="sizes[]" value="L" {% if 'L' in selected_sizes %}checked{% endif %}> L</label>
+        <label><input type="checkbox" name="sizes[]" value="XL" {% if 'XL' in selected_sizes %}checked{% endif %}> XL</label>
+        <label><input type="checkbox" name="sizes[]" value="XXL" {% if 'XXL' in selected_sizes %}checked{% endif %}> XXL</label>
+        <label><input type="checkbox" name="sizes[]" value="XXXL" {% if 'XXXL' in selected_sizes %}checked{% endif %}> XXXL</label>
+    </div>
+    
+    <h4>موجودی هر سایز:</h4>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        {% for size in product.sizes %}
+        <div>
+            <label>{{ size.size }}:</label>
+            <input type="number" name="stock_{{ size.size }}" value="{{ size.stock }}" min="0" placeholder="موجودی">
+            <input type="number" name="price_{{ size.size }}" value="{{ size.price }}" placeholder="قیمت (اختیاری)">
+        </div>
+        {% endfor %}
+    </div>
+    <br>
+
     <input type="submit" value="ذخیره تغییرات">
 </form>
 
@@ -97,23 +119,22 @@
 <a href="/admin/dashboard/products">بازگشت به لیست محصولات</a>
 
 <script>
-    function addColor() {
-        var container = document.getElementById('new-colors-container');
-        var newColor = document.createElement('div');
-        newColor.style.border = '1px solid #ccc';
-        newColor.style.padding = '10px';
-        newColor.style.margin = '10px 0';
-
-        newColor.innerHTML = `
-            <input type="text" name="new_color_name[]" placeholder="اسم رنگ"><br>
-            <input type="text" name="new_color_code[]" placeholder="کد رنگ"><br>
-            <input type="number" name="new_stock[]" placeholder="موجودی" value="0"><br>
-            <input type="number" name="new_color_price[]" placeholder="قیمت"><br>
-            <button type="button" onclick="this.parentElement.remove()">حذف</button>
-            <hr>
-        `;
-        container.appendChild(newColor);
-    }
+function addColor() {
+    var container = document.getElementById('new-colors-container');
+    var newColor = document.createElement('div');
+    newColor.style.border = '1px solid #ccc';
+    newColor.style.padding = '10px';
+    newColor.style.margin = '10px 0';
+    newColor.innerHTML = `
+        <input type="text" name="new_color_name[]" placeholder="اسم رنگ"><br>
+        <input type="text" name="new_color_code[]" placeholder="کد رنگ"><br>
+        <input type="number" name="new_stock[]" placeholder="موجودی" value="0"><br>
+        <input type="number" name="new_color_price[]" placeholder="قیمت"><br>
+        <button type="button" onclick="this.parentElement.remove()">حذف</button>
+        <hr>
+    `;
+    container.appendChild(newColor);
+}
 </script>
 
 {% endblock %}

@@ -11,9 +11,11 @@ class Product(db.Model):
     description = Column(Text, nullable=False) 
     price = Column(Integer, nullable=False, index=True)
     active = Column(Integer, nullable=False, index=True)
+    
     date_created = Column(String(15), default=get_current_time) 
     gender = Column(Enum('male', 'female', 'unisex', name='gender_enum'), default='unisex')
     category = Column(Enum('لباس', 'شلوار', 'کفش', 'تیشرت', 'پیراهن', 'کت', 'ژاکت', name='category_enum'), default='لباس')
     
     images = db.relationship('ProductImage', back_populates='product', lazy='dynamic')
     colors = db.relationship('ProductColor', back_populates='product', lazy='dynamic')
+    sizes = db.relationship('ProductSize', back_populates='product', lazy='dynamic')

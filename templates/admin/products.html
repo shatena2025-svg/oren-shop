@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<title>مدیریت محصولات</title>
+<title>admin product</title>
 {% endblock %}
 
 {% block body %}
@@ -10,8 +10,7 @@
    <tr>
       <th>تصویر</th>
       <th>اسم</th>
-      <th>جنسیت</th>
-      <th>دسته‌بندی</th>
+      <th>توضیحات</th>
       <th>قیمت</th>
       <th>فعال</th>
       <th>ویرایش</th>
@@ -21,20 +20,13 @@
    <tr>
       <td>
          {% if p.primary_image %}
-         <img style="width: 30px;" src="/static/cover/{{ p.primary_image }}">
+            <img style="width: 30px;" src="/static/cover/{{ p.primary_image }}">
          {% else %}
-         <span style="color: gray;">بدون عکس</span>
+            <span style="color: gray;">بدون عکس</span>
          {% endif %}
       </td>
       <td>{{p.name}}</td>
-      <td>
-         {% if p.gender == 'male' %}
-            مردانه
-         {% else %}
-            زنانه
-         {% endif %}
-      </td>
-      <td>{{p.category}}</td>
+      <td>{{p.description}}</td>
       <td>{{p.price}}</td>
       <td>{{p.active}}</td>
       <td><a href="/admin/dashboard/edit-product/{{ p.id }}">ویرایش</a></td>
@@ -42,72 +34,120 @@
    {% endfor %}
 </table>
 
-<form action="/admin/dashboard/products" method="post" enctype="multipart/form-data">
+<form action="/admin/dashboard/products" method="post" enctype="multipart/form-data"> 
    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
    
-   <input type="text" name="name" placeholder="نام محصول" required><br>
-   <textarea name="short_description" placeholder="توضیح کوتاه"></textarea><br>
-   <textarea name="description" placeholder="توضیحات بلند"></textarea><br>
-   <input type="number" name="price" placeholder="قیمت محصول" required><br>
+   <label>نام محصول:</label>
+   <input type="text" name="name" placeholder="نام محصول"><br>
+   
+   <label>توضیحات کوتاه:</label><br>
+   <textarea name="short_description" placeholder="توضیحات کوتاه"></textarea><br>
+   
+   <label>توضیحات:</label><br>
+   <textarea name="description" placeholder="توضیحات"></textarea><br>
+   
+   <label>قیمت:</label>
+   <input type="number" name="price" placeholder="قیمت محصول"><br>
    
    <label>جنسیت:</label>
    <select name="gender">
-      <option value="male">مردانه</option>
-      <option value="female">زنانه</option>
-      <option value="unisex" selected>اسپورت (مناسب برای همه)</option>
-   </select>
-   <br>
+       <option value="male">مردانه</option>
+       <option value="female" selected>زنانه</option>
+       <option value="unisex">اسپورت (مناسب برای همه)</option>
+   </select><br>
    
    <label>دسته‌بندی:</label>
    <select name="category">
-      <option value="لباس">لباس</option>
-      <option value="شلوار">شلوار</option>
-      <option value="کفش">کفش</option>
-      <option value="تیشرت">تیشرت</option>
-      <option value="پیراهن">پیراهن</option>
-      <option value="کت">کت</option>
-      <option value="ژاکت">ژاکت</option>
-   </select>
-   <br>
+       <option value="لباس" selected>لباس</option>
+       <option value="شلوار">شلوار</option>
+       <option value="کفش">کفش</option>
+       <option value="تیشرت">تیشرت</option>
+       <option value="پیراهن">پیراهن</option>
+       <option value="کت">کت</option>
+       <option value="ژاکت">ژاکت</option>
+   </select><br>
    
    <label>فعال:</label>
    <input value="1" type="checkbox" name="active"><br>
    
-   <label>تصاویر:</label>
+   <label>عکس‌ها:</label>
    <input type="file" name="images" multiple><br>
    
    <h3>رنگ‌های محصول:</h3>
    <div id="color-list">
-      <div class="color-item">
-         <input type="text" name="color_name[]" placeholder="اسم رنگ"><br>
-         <input type="text" name="color_code[]" placeholder="کد رنگ (مثلاً #FF0000)"><br>
-         <input type="number" name="stock[]" placeholder="موجودی"><br>
-         <input type="number" name="color_price[]" placeholder="قیمت (اختیاری)"><br>
-         <input type="file" name="color_images[]"><br>
-      </div>
+       <div class="color-item">
+           <input type="text" name="color_name[]" placeholder="اسم رنگ">
+           <input type="text" name="color_code[]" placeholder="کد رنگ (مثلاً #FF0000)">
+           <input type="number" name="stock[]" placeholder="موجودی">
+           <input type="number" name="color_price[]" placeholder="قیمت (اختیاری)">
+       </div>
    </div>
    <button type="button" onclick="addColor()">افزودن رنگ جدید</button>
    <br><br>
+   
+   <h3>سایزهای موجود:</h3>
+   <div style="display: flex; gap: 15px; flex-wrap: wrap; margin: 10px 0;">
+       <label><input type="checkbox" name="sizes[]" value="S"> S</label>
+       <label><input type="checkbox" name="sizes[]" value="M" checked> M</label>
+       <label><input type="checkbox" name="sizes[]" value="L"> L</label>
+       <label><input type="checkbox" name="sizes[]" value="XL"> XL</label>
+       <label><input type="checkbox" name="sizes[]" value="XXL"> XXL</label>
+       <label><input type="checkbox" name="sizes[]" value="XXXL"> XXXL</label>
+   </div>
+   
+   <div id="size-stock-container">
+       <h4>موجودی هر سایز:</h4>
+       <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+           <div>
+               <label>S:</label>
+               <input type="number" name="stock_S" value="0" min="0" placeholder="موجودی">
+               <input type="number" name="price_S" placeholder="قیمت (اختیاری)">
+           </div>
+           <div>
+               <label>M:</label>
+               <input type="number" name="stock_M" value="0" min="0" placeholder="موجودی">
+               <input type="number" name="price_M" placeholder="قیمت (اختیاری)">
+           </div>
+           <div>
+               <label>L:</label>
+               <input type="number" name="stock_L" value="0" min="0" placeholder="موجودی">
+               <input type="number" name="price_L" placeholder="قیمت (اختیاری)">
+           </div>
+           <div>
+               <label>XL:</label>
+               <input type="number" name="stock_XL" value="0" min="0" placeholder="موجودی">
+               <input type="number" name="price_XL" placeholder="قیمت (اختیاری)">
+           </div>
+           <div>
+               <label>XXL:</label>
+               <input type="number" name="stock_XXL" value="0" min="0" placeholder="موجودی">
+               <input type="number" name="price_XXL" placeholder="قیمت (اختیاری)">
+           </div>
+           <div>
+               <label>XXXL:</label>
+               <input type="number" name="stock_XXXL" value="0" min="0" placeholder="موجودی">
+               <input type="number" name="price_XXXL" placeholder="قیمت (اختیاری)">
+           </div>
+       </div>
+   </div>
    
    <input type="submit" value="افزودن محصول">
 </form>
 
 <script>
-   function addColor() {
-      var container = document.getElementById('color-list');
-      var newItem = document.createElement('div');
-      newItem.className = 'color-item';
-      newItem.innerHTML = `
-         <input type="text" name="color_name[]" placeholder="اسم رنگ"><br>
-         <input type="text" name="color_code[]" placeholder="کد رنگ (مثلاً #FF0000)"><br>
-         <input type="number" name="stock[]" placeholder="موجودی"><br>
-         <input type="number" name="color_price[]" placeholder="قیمت (اختیاری)"><br>
-         <input type="file" name="color_images[]"><br>
-         <button type="button" onclick="this.parentElement.remove()">حذف رنگ</button>
-         <hr>
-      `;
-      container.appendChild(newItem);
-   }
+function addColor() {
+    var container = document.getElementById('color-list');
+    var newItem = document.createElement('div');
+    newItem.className = 'color-item';
+    newItem.innerHTML = `
+        <input type="text" name="color_name[]" placeholder="اسم رنگ">
+        <input type="text" name="color_code[]" placeholder="کد رنگ">
+        <input type="number" name="stock[]" placeholder="موجودی">
+        <input type="number" name="color_price[]" placeholder="قیمت">
+        <button type="button" onclick="this.parentElement.remove()">حذف</button>
+    `;
+    container.appendChild(newItem);
+}
 </script>
 
 {% endblock %}
