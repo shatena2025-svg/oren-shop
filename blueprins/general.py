@@ -9,6 +9,17 @@ app = Blueprint('general', __name__)
 @app.route('/')
 def main(): 
     products = Product.query.filter(Product.active == 1).all()
+    for p in products:
+        primary = ProductImage.query.filter(
+            ProductImage.product_id == p.id,
+            ProductImage.is_primary == True
+        ).first()
+        if not primary:
+            primary = ProductImage.query.filter(
+                ProductImage.product_id == p.id
+            ).order_by(ProductImage.sort_order).first()
+        p.primary_image = primary.image_path if primary else None
+        
     return render_template('main.html', products=products)
 
 @app.route('/product/<id>/<name>')

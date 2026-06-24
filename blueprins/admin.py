@@ -9,6 +9,10 @@ from extentions import db
 
 app = Blueprint('admin',__name__ , url_prefix='/admin')
 
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif', 'webp'}
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.before_request
 def before_request():
     if session.get('admin_login',None) == None and request.endpoint != 'admin.login':

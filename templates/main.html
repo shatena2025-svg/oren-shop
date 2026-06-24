@@ -6,9 +6,127 @@
 
 {% block body %}
 
-{% for p in products %}
+<header class="site-header">
+    <div class="container">
 
-<a href="{{ url_for('general.product_detail', id=p.id, name=p.name) }}">{{p.name}}</a>
-{% endfor %}
+        <div class="header-name">
+            <img class="logo-image" src="{{ url_for('static',filename = 'image/logo.png') }}" alt="oren-shop">
+            <h2 class="header-title">فروشگاه لباس</h2>
+            <p class="header-subtitle">oren</p>
+        </div>
 
-{% endblock %} 
+        <nav class="navbar">
+
+            <a href="#">خانه</a>
+            <a href="#">محصولات</a>
+            <a href="#">دسته بندی</a>
+            <a href="#">درباره ی ما</a>
+
+            <div class="search-bar">
+                <form action="#" class="search-form">
+                    <input type="search" name="search" placeholder="جستجو..." class="search-input">
+                    <button type="submit" class="search-btn">
+                        <img src="{{ url_for('static',filename = 'image/search-icon.png') }}" alt="جستجو"
+                            class="search-icon">
+                    </button>
+                </form>
+            </div>
+        </nav>
+
+        <div class="header-buttons">
+            <div class="header-button">
+                <img class="cart-icon" src="{{ url_for('static',filename = 'image/cart-icon.png') }}" alt="cart">
+                <p>سبد خرید</p>
+            </div>
+            <div class="header-button">
+                <img class="prof-icon" src="{{ url_for('static',filename = 'image/prof-icon.png') }}" alt="profile">
+                <p>حساب کاربری</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<body>
+    <section class="banner-section">
+        <div class="banner-wrapper">
+            <picture>
+                <source srcset="{{ url_for('static',filename = 'image/banner-mobile.jpg') }}"
+                    media="(max-width: 768px)">
+                <img src="{{ url_for('static',filename = 'image/banner.jpg') }}" class="banner-image" alt="بنر فروشگاه">
+            </picture>
+        </div>
+    </section>
+
+    <section class="category-container">
+        <div class="category-cart">
+            <img src="{{ url_for('static',filename = 'image/woman.jpg') }}" class="category-image">
+            <p>پوشاک</p>
+            <h3>زنانه</h3>
+        </div>
+
+        <div class="category-cart">
+            <img src="{{ url_for('static',filename = 'image/man.jpg') }}" class="category-image">
+            <p>پوشاک</p>
+            <h3>مردانه</h3>
+        </div>
+
+        <div class="category-cart">
+            <img src="{{ url_for('static',filename = 'image/sport.jpg') }}" class="category-image">
+            <p>پوشاک</p>
+            <h3>اسپرت</h3>
+        </div>
+
+        <div class="category-cart">
+            <img src="{{ url_for('static',filename = 'image/shirt.jpg') }}" class="category-image">
+            <p>پوشاک</p>
+            <h3>پیراهن</h3>
+        </div>
+
+        <div class="category-cart">
+            <img src="{{ url_for('static',filename = 'image/pants.jpg') }}" class="category-image">
+            <p>پوشاک</p>
+            <h3>شلوار</h3>
+        </div>
+
+        <div class="category-cart">
+            <img src="{{ url_for('static',filename = 'image/shoes.jpg') }}" class="category-image">
+            <p>پوشاک</p>
+            <h3>کفش</h3>
+        </div>
+
+    </section>
+</body>
+
+<div class="title-box">
+    <h3>محصولات جدید</h3>
+    <img src="{{ url_for('static',filename = 'image/flash.png') }}">
+</div>
+
+<section class="product-container">
+    {% for p in products %}
+    <section class="product-cart">
+        <div class="product-box">
+            <img src="/static/cover/{{ p.primary_image }}">
+
+            <div class="product-title">
+                <div class="product-category">
+                    <span class="gender">{{ p.gender }}</span>
+                    <span class="separator">.</span>
+                    <span class="category">{{ p.category }}</span>
+                </div>
+                <h3>{{ p.name }}</h3>
+            </div>
+
+            <div class="product-button">
+                <a href="{{ url_for('general.product_detail', id=p.id, name=p.name) }}">مشاهده</a>
+                <h4 class="price">{{ p.price }} تومان</h4>
+            </div>
+        </div>
+    </section>
+    {% endfor %}
+</section>
+
+
+
+{% endblock %}
+
