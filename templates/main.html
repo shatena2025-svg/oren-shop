@@ -6,127 +6,340 @@
 
 {% block body %}
 
-<header class="site-header">
-    <div class="container">
-
-        <div class="header-name">
-            <img class="logo-image" src="{{ url_for('static',filename = 'image/logo.png') }}" alt="oren-shop">
-            <h2 class="header-title">فروشگاه لباس</h2>
-            <p class="header-subtitle">oren</p>
-        </div>
-
-        <nav class="navbar">
-
-            <a href="#">خانه</a>
-            <a href="#">محصولات</a>
-            <a href="#">دسته بندی</a>
-            <a href="#">درباره ی ما</a>
-
-            <div class="search-bar">
-                <form action="#" class="search-form">
-                    <input type="search" name="search" placeholder="جستجو..." class="search-input">
-                    <button type="submit" class="search-btn">
-                        <img src="{{ url_for('static',filename = 'image/search-icon.png') }}" alt="جستجو"
-                            class="search-icon">
-                    </button>
-                </form>
-            </div>
-        </nav>
-
-        <div class="header-buttons">
-            <div class="header-button">
-                <img class="cart-icon" src="{{ url_for('static',filename = 'image/cart-icon.png') }}" alt="cart">
-                <p>سبد خرید</p>
-            </div>
-            <div class="header-button">
-                <img class="prof-icon" src="{{ url_for('static',filename = 'image/prof-icon.png') }}" alt="profile">
-                <p>حساب کاربری</p>
-            </div>
-        </div>
+<header class="header-container">
+    <div class="logo">
+        <img src="/static/image/logo.png">
+        <h3>فروشگاه لباس</h3>
+        <button type="button">
+            <img src="/static/image/instagram.png">
+            <h4>اینستاگرام فروشگاه</h4>
+        </button>
+    </div>
+    <div class="search-bar">
+        <form class="search">
+            <input type="text" placeholder="دنبال چی میگردی؟">
+            <button type="submit">
+                <img src="/static/image/search-icon.png" alt="جستجو">
+            </button>
+        </form>
     </div>
 </header>
 
-<body>
-    <section class="banner-section">
-        <div class="banner-wrapper">
-            <picture>
-                <source srcset="{{ url_for('static',filename = 'image/banner-mobile.jpg') }}"
-                    media="(max-width: 768px)">
-                <img src="{{ url_for('static',filename = 'image/banner.jpg') }}" class="banner-image" alt="بنر فروشگاه">
-            </picture>
+<section class="nav-bar">
+<button class="hamburger-menu" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+    <div class="nav-container">
+        <div class="nav-box">
+            <img src="/static/image/category.png">
+            <a href="#">دسته بندی</a>
         </div>
-    </section>
-
-    <section class="category-container">
-        <div class="category-cart">
-            <img src="{{ url_for('static',filename = 'image/woman.jpg') }}" class="category-image">
-            <p>پوشاک</p>
-            <h3>زنانه</h3>
+        <div class="nav-box">
+            <img src="/static/image/product.png">
+            <a href="#">صفحه محصولات</a>
         </div>
-
-        <div class="category-cart">
-            <img src="{{ url_for('static',filename = 'image/man.jpg') }}" class="category-image">
-            <p>پوشاک</p>
-            <h3>مردانه</h3>
+        <div class="nav-box">
+            <img src="/static/image/about.png">
+            <a href="#">درباره ما</a>
         </div>
-
-        <div class="category-cart">
-            <img src="{{ url_for('static',filename = 'image/sport.jpg') }}" class="category-image">
-            <p>پوشاک</p>
-            <h3>اسپرت</h3>
+        <div class="nav-box">
+            <img src="/static/image/search.png">
+            <a href="#">سرچ</a>
         </div>
+    </div>
 
-        <div class="category-cart">
-            <img src="{{ url_for('static',filename = 'image/shirt.jpg') }}" class="category-image">
-            <p>پوشاک</p>
-            <h3>پیراهن</h3>
+    <div class="nav-button">
+        <button class="login-btn">
+            <img src="/static/image/prof-icon.png">
+            <h4>ورود/ ثبت نام</h4>
+        </button>
+        <button class="cart-btn">
+            <img src="/static/image/icon-cart.png">
+            <h4>سبد خرید</h4>
+        </button>
+    </div>
+</section>
+
+
+<section class="hero-container">
+    <div class="hero-content">
+        <img class="desktop-hero" src="/static/image/banner.jpg" alt="banner">
+        <img class="mobile-hero" src="/static/image/mobile-hero.jpg" alt="banner">
+        <div class="hero-txt">
+            <h3>جدید ترین کالکشن های لباس های <span>برنـــــد</span></h3>
+            <p>کالکشن جدید ما: لباس‌های مینیمال برای روزمره. کیفیت در جنس، سادگی در طراحی، خاص بودن در جزئیات</p>
         </div>
-
-        <div class="category-cart">
-            <img src="{{ url_for('static',filename = 'image/pants.jpg') }}" class="category-image">
-            <p>پوشاک</p>
-            <h3>شلوار</h3>
+        <div class="hero-btn">
+            <button class="product-btn">مشاهده ی محصولات</button>
+            <button class="about-btn">درباره ما</button>
         </div>
+    </div>
+</section>
 
-        <div class="category-cart">
-            <img src="{{ url_for('static',filename = 'image/shoes.jpg') }}" class="category-image">
-            <p>پوشاک</p>
-            <h3>کفش</h3>
+<div class="view-container">
+    <div class="view-header">
+        <div class="view-title">
+            <img class="shine-icon" src="/static/image/pin-icon.png">
+            <h2><span>محصولات</span> پرطرفدار</h2>
         </div>
+        <div class="view-title">
+            <img class="shine-icon" src="/static/image/Popular-icon.png">
+            <p>محصولات پیشنهادی</p>
+        </div>
+        <img class="view-product" src="/static/image/view-product.png">
+    </div>
 
-    </section>
-</body>
+    <button class="view-btn">
+        <img src="/static/image/flash.png">
+    </button>
 
-<div class="title-box">
-    <h3>محصولات جدید</h3>
-    <img src="{{ url_for('static',filename = 'image/flash.png') }}">
+    <div class="view-products">
+        {% for product in popular_products[:4] %}
+        <div class="view-cart">
+            <img src="/static/cover/{{ product.primary_image }}" alt="{{ product.name }}">
+            <h3>{{ product.name }}</h3>
+            <div class="view-cart-price">
+                <p class="price">{{ product.price }} <span>تومان</span></p>
+                <a href="/product/{{ product.id }}/{{ product.name }}" class="btn-view">
+                    <img src="/static/image/product2.png" alt="مشاهده">
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
-<section class="product-container">
-    {% for p in products %}
-    <section class="product-cart">
-        <div class="product-box">
-            <img src="/static/cover/{{ p.primary_image }}">
+<section class="category-container">
+    <div class="category-contant">
+        <h3>دسته بندی های محبوب</h3>
+        <button>مشاهده همه</button>
+    </div>
+    <div class="category-box">
+        <button class="category-btn">
+            <img src="/static/image/flash.png">
+        </button>
 
-            <div class="product-title">
-                <div class="product-category">
-                    <span class="gender">{{ p.gender }}</span>
-                    <span class="separator">.</span>
-                    <span class="category">{{ p.category }}</span>
+        <div class="category-cart">
+            <img src="/static/image/category/woman.png">
+            <h3>لباس زنانه</h3>
+        </div>
+        <div class="category-cart">
+            <img src="/static/image/category/man.png">
+            <h3>لباس مردانه</h3>
+        </div>
+        <div class="category-cart">
+            <img src="/static/image/category/pirahan.png">
+            <h3>پیراهن</h3>
+        </div>
+        <div class="category-cart">
+            <img src="/static/image/category/shalvar.png">
+            <h3>شلوار</h3>
+        </div>
+        <div class="category-cart">
+            <img src="/static/image/category/shose.png">
+            <h3>کفش</h3>
+        </div>
+    </div>
+
+</section>
+
+<section class="new-product">
+    <div class="new-product-title">
+        <h3>جدیدترین <span>محصولات</span></h3>
+        <img src="/static/image/shine-icon.png" alt="shine">
+    </div>
+    <div class="new-product-container">
+        {% for p in products[:5]|reverse %}
+        <div class="new-product-cart">
+            <img src="/static/cover/{{ p.primary_image }}" alt="{{ p.name }}">
+            <div class="product-info">
+                <span class="category">{{ p.category }}</span>
+                <h4>{{ p.name }}</h4>
+                <div class="product-actions">
+                    <p class="price">{{ p.price }} <span>تومان</span></p>
+                    <a href="/product/{{ p.id }}/{{ p.name }}" class="btn-view">
+                        <img src="/static/image/product2.png" alt="مشاهده">
+                    </a>
                 </div>
-                <h3>{{ p.name }}</h3>
-            </div>
-
-            <div class="product-button">
-                <a href="{{ url_for('general.product_detail', id=p.id, name=p.name) }}">مشاهده</a>
-                <h4 class="price">{{ p.price }} تومان</h4>
             </div>
         </div>
-    </section>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </section>
+
+<section class="product-banner">
+    <div class="product-banner-box">
+        <img src="/static/image/product banner.png">
+    </div>
+    <div class="product-banner-box">
+        <img src="/static/image/product2 banner.png">
+    </div>
+</section>
+
+<section class="recent-product">
+    <div class="recent-product-title">
+        <img src="/static/image/shine-icon.png" alt="shine">
+        <h3>محصولات <span>اخیر</span></h3>
+        <button class="filter-btn active" data-gender="all">همه</button>
+        <button class="filter-btn" data-gender="male">مردانه</button>
+        <button class="filter-btn" data-gender="female">زنانه</button>
+        <button class="filter-btn" data-gender="unisex">مناسب همه</button>
+        <button class="view-all-btn">مشاهده همه</button>
+    </div>
+    <div class="recent-product-container">
+        {% for p in products[:8]|reverse %}
+        <div class="recent-product-cart" data-gender="{{ p.gender }}">
+            <img src="/static/cover/{{ p.primary_image }}" alt="{{ p.name }}">
+            <div class="product-info">
+                <span class="category">{{ p.category }}</span>
+                <h4>{{ p.name }}</h4>
+                <div class="product-actions">
+                    <p class="price">{{ p.price }} <span>تومان</span></p>
+                    <a href="/product/{{ p.id }}/{{ p.name }}" class="btn-view">
+                        <img src="/static/image/product2.png" alt="مشاهده">
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="store-about">
+    <div class="store-about-contant">
+        <h3>مزیت های فروشگاه</h3>
+        <button>مشاهده ی همه</button>
+    </div>
+    <div class="store-about-box">
+        <div class="store-about-cart">
+            <img src="/static/image/ando.png">
+            <h4>ضمانت بازگشت کالا</h4>
+        </div>
+        <div class="store-about-cart">
+            <img src="/static/image/garante.png">
+            <h4>ضمانت اصالت کالا</h4>
+        </div>
+        <div class="store-about-cart">
+            <img src="/static/image/ersal.png">
+            <h4>ارسال کالا رایگان و سریع</h4>
+        </div>
+        <div class="store-about-cart">
+            <img src="/static/image/khadamat.png">
+            <h4>خدمات پس از خرید</h4>
+        </div>
+    </div>
+
+</section>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-col">
+            <div class="footer-logo">
+                <img src="/static/image/logo.png" alt="logo">
+                <h3>فروشگاه لباس</h3>
+            </div>
+            <p class="footer-desc">
+                فروشگاه اینترنتی لباس با بهترین کیفیت و قیمت‌های مناسب.
+                ارائه‌دهنده جدیدترین مدل‌های روز دنیا با ضمانت اصالت کالا.
+            </p>
+            <div class="footer-social">
+                <a href="#" class="social-link"><img src="/static/image/instagram.png" alt="اینستاگرام"></a>
+                <a href="#" class="social-link"><img src="/static/image/telegram.png" alt="تلگرام"></a>
+                <a href="#" class="social-link"><img src="/static/image/whatsapp.png" alt="واتساپ"></a>
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h4>دسترسی سریع</h4>
+            <ul class="footer-links">
+                <li><a href="#">صفحه اصلی</a></li>
+                <li><a href="#">محصولات</a></li>
+                <li><a href="#">دسته‌بندی‌ها</a></li>
+                <li><a href="#">درباره ما</a></li>
+                <li><a href="#">تماس با ما</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>دسته‌بندی‌ها</h4>
+            <ul class="footer-links">
+                <li><a href="#">لباس زنانه</a></li>
+                <li><a href="#">لباس مردانه</a></li>
+                <li><a href="#">پیراهن</a></li>
+                <li><a href="#">شلوار</a></li>
+                <li><a href="#">کفش</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>اطلاعات تماس</h4>
+            <ul class="footer-contact">
+                <li>
+                    <img src="/static/image/location.png" alt="آدرس">
+                    <span>تهران، خیابان ولیعصر، پلاک ۱۲۳</span>
+                </li>
+                <li>
+                    <img src="/static/image/phone.png" alt="تلفن">
+                    <span>۰۲۱-۱۲۳۴۵۶۷۸</span>
+                </li>
+                <li>
+                    <img src="/static/image/email.png" alt="ایمیل">
+                    <span>info@orenshop.com</span>
+                </li>
+                <li>
+                    <img src="/static/image/time.png" alt="ساعت کاری">
+                    <span>شنبه تا پنجشنبه ۹ الی ۲۰</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-bottom">
+        <p>تمامی حقوق مادی و معنوی این سایت متعلق به <span>oren shop</span> می‌باشد.</p>
+        <div class="footer-payment">
+            <img src="/static/image/zarinpal.png" alt="زرین‌پال">
+            <img src="/static/image/paypal.png" alt="پی‌پال">
+            <img src="/static/image/visa.png" alt="ویزا">
+            <img src="/static/image/mastercard.png" alt="مسترکارت">
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const productCarts = document.querySelectorAll('.recent-product-cart');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const gender = this.dataset.gender;
+
+                productCarts.forEach(cart => {
+                    if (gender === 'all' || cart.dataset.gender === gender) {
+                        cart.style.display = 'block';
+                    } else {
+                        cart.style.display = 'none';
+                    }
+                });
+            });
+        });
+    });
+
+function toggleMenu() {
+    var navContainer = document.querySelector('.nav-container');
+    var hamburger = document.querySelector('.hamburger-menu');
+    navContainer.classList.toggle('responsive');
+    hamburger.classList.toggle('active');
+}
+</script>
 
 
 
 {% endblock %}
-

@@ -11,6 +11,7 @@ class Product(db.Model):
     description = Column(Text, nullable=False) 
     price = Column(Integer, nullable=False, index=True)
     active = Column(Integer, nullable=False, index=True)
+    view_count = Column(Integer, default=0)
     
     date_created = Column(String(15), default=get_current_time) 
     gender = Column(Enum('male', 'female', 'unisex', name='gender_enum'), default='unisex')
