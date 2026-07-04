@@ -9,8 +9,166 @@
 </head>
 
 <body>
+    <header class="header-container">
+        <div class="logo">
+            <img src="/static/image/logo.png">
+            <h3>فروشگاه لباس</h3>
+            <button type="button">
+                <img src="/static/image/instagram.png">
+                <h4>اینستاگرام فروشگاه</h4>
+            </button>
+        </div>
+        <div class="search-bar">
+            <form class="search">
+                <input type="text" placeholder="دنبال چی میگردی؟">
+                <button type="submit">
+                    <img src="/static/image/search-icon.png" alt="جستجو">
+                </button>
+            </form>
+        </div>
+    </header>
+    <section class="nav-bar">
+        <div class="nav-container" id="navMenu">
+            <div class="nav-box">
+                <img src="/static/image/category.png">
+                <a href="#">دسته بندی</a>
+            </div>
+            <div class="nav-box">
+                <img src="/static/image/product.png">
+                <a href="#">صفحه محصولات</a>
+            </div>
+            <div class="nav-box">
+                <img src="/static/image/about.png">
+                <a href="#">درباره ما</a>
+            </div>
+            <div class="nav-box">
+                <img src="/static/image/search.png">
+                <a href="#">سرچ</a>
+            </div>
+        </div>
+        <button class="hamburger-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="nav-button">
+            <button class="login-btn">
+                <img src="/static/image/prof-icon.png">
+                <h4>ورود</h4>
+            </button>
+            <button class="cart-btn">
+                <img src="/static/image/icon-cart.png">
+                <h4>سبد خرید</h4>
+            </button>
+        </div>
+    </section>
     {% block body %}
     {% endblock %}
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <div class="footer-logo">
+                    <img src="/static/image/logo.png" alt="logo">
+                    <h3>فروشگاه لباس</h3>
+                </div>
+                <p class="footer-desc">
+                    فروشگاه اینترنتی لباس با بهترین کیفیت و قیمت‌های مناسب.
+                    ارائه‌دهنده جدیدترین مدل‌های روز دنیا با ضمانت اصالت کالا.
+                </p>
+                <div class="footer-social">
+                    <a href="#" class="social-link"><img src="/static/image/instagram.png" alt="اینستاگرام"></a>
+                    <a href="#" class="social-link"><img src="/static/image/telegram.png" alt="تلگرام"></a>
+                    <a href="#" class="social-link"><img src="/static/image/whatsapp.png" alt="واتساپ"></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>دسترسی سریع</h4>
+                <ul class="footer-links">
+                    <li><a href="#">صفحه اصلی</a></li>
+                    <li><a href="#">محصولات</a></li>
+                    <li><a href="#">دسته‌بندی‌ها</a></li>
+                    <li><a href="#">درباره ما</a></li>
+                    <li><a href="#">تماس با ما</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>دسته‌بندی‌ها</h4>
+                <ul class="footer-links">
+                    <li><a href="#">لباس زنانه</a></li>
+                    <li><a href="#">لباس مردانه</a></li>
+                    <li><a href="#">پیراهن</a></li>
+                    <li><a href="#">شلوار</a></li>
+                    <li><a href="#">کفش</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>اطلاعات تماس</h4>
+                <ul class="footer-contact">
+                    <li>
+                        <img src="/static/image/location.png" alt="آدرس">
+                        <span>تهران، خیابان ولیعصر، پلاک ۱۲۳</span>
+                    </li>
+                    <li>
+                        <img src="/static/image/phone.png" alt="تلفن">
+                        <span>۰۲۱-۱۲۳۴۵۶۷۸</span>
+                    </li>
+                    <li>
+                        <img src="/static/image/email.png" alt="ایمیل">
+                        <span>info@orenshop.com</span>
+                    </li>
+                    <li>
+                        <img src="/static/image/time.png" alt="ساعت کاری">
+                        <span>شنبه تا پنجشنبه ۹ الی ۲۰</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-divider"></div>
+        <div class="footer-bottom">
+            <p>تمامی حقوق مادی و معنوی این سایت متعلق به <span>oren shop</span> می‌باشد.</p>
+            <div class="footer-payment">
+                <img src="/static/image/zarinpal.png" alt="زرین‌پال">
+                <img src="/static/image/paypal.png" alt="پی‌پال">
+                <img src="/static/image/visa.png" alt="ویزا">
+                <img src="/static/image/mastercard.png" alt="مسترکارت">
+            </div>
+        </div>
+    </footer>
+    <script>
+        function toggleMenu() {
+            var nav = document.querySelector('.nav-container');
+            var ham = document.querySelector('.hamburger-menu');
+            if (nav) {
+                nav.classList.toggle('responsive');
+            }
+            if (ham) {
+                ham.classList.toggle('active');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var ham = document.querySelector('.hamburger-menu');
+            if (ham) {
+                ham.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    toggleMenu();
+                });
+            }
+
+            document.addEventListener('click', function (e) {
+                var nav = document.querySelector('.nav-container');
+                var ham = document.querySelector('.hamburger-menu');
+                if (nav && nav.classList.contains('responsive')) {
+                    if (!nav.contains(e.target) && !ham.contains(e.target)) {
+                        nav.classList.remove('responsive');
+                        if (ham) {
+                            ham.classList.remove('active');
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

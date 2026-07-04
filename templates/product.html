@@ -6,77 +6,154 @@
 
 {% block body %}
 
-{% if product.primary_image %}
-    <img style="width: 200px;" src="/static/cover/{{ product.primary_image }}">
-{% else %}
-    <img style="width: 200px;" src="/static/cover/default.jpg">
-{% endif %}
-<br>
+<div class="product-detail-container">
+    <div class="product-gallery-wrapper">
+        <div class="product-gallery">
+            <div class="thumbnail-list">
+                {% for image in product.images %}
+                <img class="thumbnail" src="/static/cover/{{ image.image_path }}" alt="{{ product.name }}"
+                    onclick="changeImage(this.src)">
+                {% endfor %}
+            </div>
+            <div class="main-image">
+                {% if product.primary_image %}
+                <img id="mainImage" src="/static/cover/{{ product.primary_image }}" alt="{{ product.name }}">
+                {% else %}
+                <img id="mainImage" src="/static/cover/default.jpg" alt="{{ product.name }}">
+                {% endif %}
+            </div>
+        </div>
 
-{{ product.id }}<br>
-{{ product.name }}<br>
+        <div class="thumbnail-description-box">
+            <h5>📋 توضیحات کوتاه</h5>
+            <p>{{ product.short_description or 'این محصول با کیفیت بالا و طراحی منحصر‌به‌فرد، انتخابی عالی برای استایل روزمره شماست.' }}</p>
+            <div class="tags">
+                <span>#{{ product.category }}</span>
+                <span>#{{ product.gender }}</span>
+                <span>#جدید</span>
+            </div>
+        </div>
+    </div>
 
-<span>جنسیت: 
-    {% if product.gender == 'male' %}
-        مردانه
-    {% elif product.gender == 'female' %}
-        زنانه
-    {% else %}
-        اسپورت (مناسب برای همه)
-    {% endif %}
-</span><br>
+    <div class="product-info-detail">
+        <h1>{{ product.name }}</h1>
 
-<span>دسته‌بندی: {{ product.category }}</span><br>
+        <div class="product-meta">
+            <span class="gender">
+                جنسیت:
+                {% if product.gender == 'male' %}
+                مردانه
+                {% elif product.gender == 'female' %}
+                زنانه
+                {% else %}
+                اسپورت
+                {% endif %}
+            </span>
+            <span class="category">دسته‌بندی: {{ product.category }}</span>
+        </div>
 
-{{ product.price }}<br>
+        <div class="product-price" id="productPrice">{{ product.price }} تومان</div>
 
-<h3>رنگ و سایز موجود:</h3>
-<form method="post" action="/add-to-cart">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <input type="hidden" name="product_id" value="{{ product.id }}">
-    
-    <label>رنگ:</label>
-    <select name="color_id" required>
-        <option value="">انتخاب رنگ</option>
-        {% for color in product.colors %}
-            {% if color.stock > 0 %}
-                <option value="{{ color.id }}">
-                    {{ color.color_name }} (موجودی: {{ color.stock }})
-                </option>
-            {% else %}
-                <option value="{{ color.id }}" disabled>
-                    {{ color.color_name }} (ناموجود)
-                </option>
-            {% endif %}
-        {% endfor %}
-    </select>
-    <br><br>
-    
-    <label>سایز:</label>
-    <select name="size_id" required>
-        <option value="">انتخاب سایز</option>
-        {% for size in product.sizes %}
-            {% if size.stock > 0 %}
-                <option value="{{ size.id }}">
-                    سایز {{ size.size }} (موجودی: {{ size.stock }})
-                </option>
-            {% else %}
-                <option value="{{ size.id }}" disabled>
-                    سایز {{ size.size }} (ناموجود)
-                </option>
-            {% endif %}
-        {% endfor %}
-    </select>
-    <br><br>
-    
-    <label>تعداد:</label>
-    <input type="number" name="quantity" value="1" min="1">
-    <br><br>
-    
-    <input type="submit" value="اضافه کردن به سبد خرید">
-</form>
+        <div class="product-description">
+            <h4>توضیحات:</h4>
+            <p>{{ product.description }}</p>
+        </div>
 
-<br>
-<a href="/">بازگشت به صفحه اصلی</a>
+        <form method="post" action="/add-to-cart" class="add-to-cart-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+
+            <div class="color-section">
+                <label>انتخاب رنگ:</label>
+                <div class="color-options">
+                    {% for color in product.colors %}
+                    {% if color.stock > 0 %}
+                    <button type="button" class="color-btn" data-color-id="{{ color.id }}"
+                        data-color-price="{{ color.price or product.price }}"
+                        style="background: #{{ color.color_code }};"
+                        onclick="selectColor(this, '#{{ color.color_code }}', {{ color.price or product.price }})">
+                    </button>
+                    {% else %}
+                    <button type="button" class="color-btn disabled" style="background: #{{ color.color_code }};" disabled>
+                    </button>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <input type="hidden" name="color_id" id="selectedColor" required>
+                <span id="selectedColorName" class="selected-label">رنگی انتخاب نشده</span>
+            </div>
+
+            <div class="size-section">
+                <label>انتخاب سایز:</label>
+                <div class="size-options">
+                    {% for size in product.sizes %}
+                    {% if size.stock > 0 %}
+                    <button type="button" class="size-btn" data-size-id="{{ size.id }}"
+                        data-size-price="{{ size.price or product.price }}"
+                        onclick="selectSize(this, {{ size.price or product.price }})">
+                        {{ size.size }}
+                    </button>
+                    {% else %}
+                    <button type="button" class="size-btn disabled" disabled>
+                        {{ size.size }}
+                    </button>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <input type="hidden" name="size_id" id="selectedSize" required>
+            </div>
+
+            <div class="quantity-section">
+                <label>تعداد:</label>
+                <input type="number" name="quantity" value="1" min="1" max="10">
+            </div>
+
+            <button type="submit" class="add-to-cart-btn">اضافه کردن به سبد خرید</button>
+        </form>
+
+        <a href="/" class="back-link">بازگشت به صفحه اصلی</a>
+    </div>
+</div>
+
+<script>
+    let basePrice = {{ product.price }};
+    let selectedColorPrice = null;
+    let selectedSizePrice = null;
+
+    function changeImage(src) {
+        document.getElementById('mainImage').src = src;
+    }
+
+    function selectColor(btn, colorCode, price) {
+        document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('selectedColor').value = btn.dataset.colorId;
+        document.getElementById('selectedColorName').textContent = 'رنگ انتخاب شده: ' + colorCode;
+        selectedColorPrice = price;
+        updatePrice();
+    }
+
+    function selectSize(btn, price) {
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('selectedSize').value = btn.dataset.sizeId;
+        selectedSizePrice = price;
+        updatePrice();
+    }
+
+    function updatePrice() {
+        let finalPrice = basePrice;
+        if (selectedSizePrice !== null) {
+            finalPrice = selectedSizePrice;
+        } else if (selectedColorPrice !== null) {
+            finalPrice = selectedColorPrice;
+        }
+        const priceElement = document.getElementById('productPrice');
+        priceElement.innerHTML = finalPrice.toLocaleString() + ' تومان';
+        priceElement.classList.remove('price-changed');
+        void priceElement.offsetWidth;
+        priceElement.classList.add('price-changed');
+    }
+</script>
 
 {% endblock %}
