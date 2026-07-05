@@ -28,6 +28,13 @@ def unauthorized():
     flash('وارد حساب کاربریتان شوید')
     return redirect(url_for('user.login'))
 
+@app.template_filter('currency')
+def currency_filter(value):
+    try:
+        return f"{int(value):,}".replace(',', '٬')
+    except (ValueError, TypeError):
+        return value
+
 db.init_app(app)
 csrf = CSRFProtect(app)
 

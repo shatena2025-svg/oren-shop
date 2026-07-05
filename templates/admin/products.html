@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<title>admin product</title>
+<title>مدیریت محصولات</title>
 {% endblock %}
 
 {% block body %}
@@ -27,7 +27,7 @@
       </td>
       <td>{{p.name}}</td>
       <td>{{p.description}}</td>
-      <td>{{p.price}}</td>
+      <td>{{ "{:,}".format(p.price).replace(',', '٬') }}</td>
       <td>{{p.active}}</td>
       <td><a href="/admin/dashboard/edit-product/{{ p.id }}">ویرایش</a></td>
    </tr>
@@ -101,32 +101,26 @@
            <div>
                <label>S:</label>
                <input type="number" name="stock_S" value="0" min="0" placeholder="موجودی">
-               <input type="number" name="price_S" placeholder="قیمت (اختیاری)">
            </div>
            <div>
                <label>M:</label>
                <input type="number" name="stock_M" value="0" min="0" placeholder="موجودی">
-               <input type="number" name="price_M" placeholder="قیمت (اختیاری)">
            </div>
            <div>
                <label>L:</label>
                <input type="number" name="stock_L" value="0" min="0" placeholder="موجودی">
-               <input type="number" name="price_L" placeholder="قیمت (اختیاری)">
            </div>
            <div>
                <label>XL:</label>
                <input type="number" name="stock_XL" value="0" min="0" placeholder="موجودی">
-               <input type="number" name="price_XL" placeholder="قیمت (اختیاری)">
            </div>
            <div>
                <label>XXL:</label>
                <input type="number" name="stock_XXL" value="0" min="0" placeholder="موجودی">
-               <input type="number" name="price_XXL" placeholder="قیمت (اختیاری)">
            </div>
            <div>
                <label>XXXL:</label>
                <input type="number" name="stock_XXXL" value="0" min="0" placeholder="موجودی">
-               <input type="number" name="price_XXXL" placeholder="قیمت (اختیاری)">
            </div>
        </div>
    </div>

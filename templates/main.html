@@ -15,8 +15,8 @@
             <p>کالکشن جدید ما: لباس‌های مینیمال برای روزمره. کیفیت در جنس، سادگی در طراحی، خاص بودن در جزئیات</p>
         </div>
         <div class="hero-btn">
-            <button class="product-btn">مشاهده ی محصولات</button>
-            <button class="about-btn">درباره ما</button>
+            <button class="product-btn" onclick="window.location.href='/shop'">مشاهده ی محصولات</button>
+            <button class="about-btn" onclick="window.location.href='/about'">درباره ما</button>
         </div>
     </div>
 </section>
@@ -44,7 +44,7 @@
             <img src="/static/cover/{{ product.primary_image }}" alt="{{ product.name }}">
             <h3>{{ product.name }}</h3>
             <div class="view-cart-price">
-                <p class="price">{{ product.price }} <span>تومان</span></p>
+                <p class="price">{{ "{:,}".format(product.price).replace(',', '٬') }} <span>تومان</span></p>
                 <a href="/product/{{ product.id }}/{{ product.name }}" class="btn-view">
                     <img src="/static/image/product2.png" alt="مشاهده">
                 </a>
@@ -57,35 +57,34 @@
 <section class="category-container">
     <div class="category-contant">
         <h3>دسته بندی های محبوب</h3>
-        <button>مشاهده همه</button>
+        <a href="/shop">مشاهده همه</a>
     </div>
     <div class="category-box">
         <button class="category-btn">
             <img src="/static/image/flash.png">
         </button>
 
-        <div class="category-cart">
+        <a href="/shop?category=لباس" class="category-cart">
             <img src="/static/image/category/woman.png">
-            <h3>لباس زنانه</h3>
-        </div>
-        <div class="category-cart">
-            <img src="/static/image/category/man.png">
-            <h3>لباس مردانه</h3>
-        </div>
-        <div class="category-cart">
-            <img src="/static/image/category/pirahan.png">
-            <h3>پیراهن</h3>
-        </div>
-        <div class="category-cart">
+            <p>لباس</p>
+        </a>
+        <a href="/shop?category=شلوار" class="category-cart">
             <img src="/static/image/category/shalvar.png">
-            <h3>شلوار</h3>
-        </div>
-        <div class="category-cart">
+            <p>شلوار</p>
+        </a>
+        <a href="/shop?category=کفش" class="category-cart">
             <img src="/static/image/category/shose.png">
-            <h3>کفش</h3>
-        </div>
+            <p>کفش</p>
+        </a>
+        <a href="/shop?category=تیشرت" class="category-cart">
+            <img src="/static/image/category/man.png">
+            <p>تیشرت</p>
+        </a>
+        <a href="/shop?category=پیراهن" class="category-cart">
+            <img src="/static/image/category/pirahan.png">
+            <p>پیراهن</p>
+        </a>
     </div>
-
 </section>
 
 <section class="new-product">
@@ -101,7 +100,7 @@
                 <span class="category">{{ p.category }}</span>
                 <h4>{{ p.name }}</h4>
                 <div class="product-actions">
-                    <p class="price">{{ p.price }} <span>تومان</span></p>
+                    <p class="price">{{ "{:,}".format(p.price).replace(',', '٬') }} <span>تومان</span></p>
                     <a href="/product/{{ p.id }}/{{ p.name }}" class="btn-view">
                         <img src="/static/image/product2.png" alt="مشاهده">
                     </a>
@@ -139,7 +138,7 @@
                 <span class="category">{{ p.category }}</span>
                 <h4>{{ p.name }}</h4>
                 <div class="product-actions">
-                    <p class="price">{{ p.price }} <span>تومان</span></p>
+                    <p class="price">{{ "{:,}".format(p.price).replace(',', '٬') }} <span>تومان</span></p>
                     <a href="/product/{{ p.id }}/{{ p.name }}" class="btn-view">
                         <img src="/static/image/product2.png" alt="مشاهده">
                     </a>
@@ -150,10 +149,23 @@
     </div>
 </section>
 
+<section class="style-finder">
+    <div class="style-finder-container">
+        <div class="style-finder-image">
+            <img src="/static/image/style-finder.jpg" alt="سبک شخصی">
+        </div>
+        <div class="style-finder-content">
+            <h2>سبک <span>شخصی</span> خود را پیدا کنید</h2>
+            <p>با انتخاب محصولات مناسب، استایل منحصر به فرد خود را بسازید.</p>
+            <a href="/shop" class="style-finder-btn">مشاهده محصولات</a>
+        </div>
+    </div>
+</section>
+
 <section class="store-about">
     <div class="store-about-contant">
         <h3>مزیت های فروشگاه</h3>
-        <button>مشاهده ی همه</button>
+        <button onclick="window.location.href='/about'">مشاهده ی همه</button>
     </div>
     <div class="store-about-box">
         <div class="store-about-cart">
@@ -166,7 +178,7 @@
         </div>
         <div class="store-about-cart">
             <img src="/static/image/ersal.png">
-            <h4>ارسال کالا رایگان و سریع</h4>
+            <h4>ارسال رایگان کالا</h4>
         </div>
         <div class="store-about-cart">
             <img src="/static/image/khadamat.png">

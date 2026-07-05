@@ -1,11 +1,53 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<title>درباره ی فروشگاه اینترنتی | OREN </title>
+<title>درباره ما | فروشگاه اورن</title>
 {% endblock %}
 
 {% block body %}
 
-about us
+<section class="about-banner">
+    <h1>درباره <span>ما</span></h1>
+    <p>با فروشگاه اورن آشنا شوید</p>
+</section>
+
+<section class="about-section">
+    <div class="about-content">
+        <div class="about-text">
+            <h2>داستان <span>ما</span></h2>
+            <p>فروشگاه اورن با هدف ارائه بهترین و باکیفیت‌ترین محصولات پوشاک فعالیت خود را آغاز کرد. ما معتقدیم هر فردی حق دارد استایل منحصر به فرد خود را داشته باشد.</p>
+            <p>تیم ما متشکل از متخصصان حوزه مد و پوشاک است که با دقت و وسواس بالایی محصولات را برای شما انتخاب می‌کنند.</p>
+            <a href="/shop" class="about-us-btn">مشاهده محصولات</a>
+        </div>
+        <div class="about-image">
+            <img src="/static/image/about-us.jpg" alt="درباره ما">
+        </div>
+    </div>
+</section>
+
+<section class="about-features">
+    <div class="features-grid">
+        <div class="feature-item">
+            <img src="/static/image/garante.png" alt="کیفیت">
+            <h4>کیفیت بالا</h4>
+            <p>بهترین پارچه‌ها</p>
+        </div>
+        <div class="feature-item">
+            <img src="/static/image/ersal.png" alt="ارسال">
+            <h4>ارسال سریع</h4>
+            <p>در کوتاه‌ترین زمان</p>
+        </div>
+        <div class="feature-item">
+            <img src="/static/image/khadamat.png" alt="پشتیبانی">
+            <h4>پشتیبانی ۲۴/۷</h4>
+            <p>پاسخگویی شبانه‌روزی</p>
+        </div>
+        <div class="feature-item">
+            <img src="/static/image/ando.png" alt="بازگشت">
+            <h4>ضمانت بازگشت</h4>
+            <p>بازگشت کالا</p>
+        </div>
+    </div>
+</section>
 
 {% endblock %}

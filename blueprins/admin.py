@@ -124,12 +124,10 @@ def products():
     for size_name in sizes:
         if size_name.strip():
             stock = request.form.get(f'stock_{size_name}', 0)
-            price = request.form.get(f'price_{size_name}')
             product_size = ProductSize(
                 product_id=p.id,
                 size=size_name.strip(),
-                stock=int(stock) if stock else 0,
-                price=int(price) if price else None
+                stock=int(stock) if stock else 0
             )
             db.session.add(product_size)
     if sizes:
@@ -137,7 +135,6 @@ def products():
     
     flash('محصول با موفقیت اضافه شد')
     return redirect(url_for('admin.products'))
-
 
 @app.route('/dashboard/edit-product/<id>', methods=["GET","POST"])
 def edit_product(id):
@@ -181,17 +178,14 @@ def edit_product(id):
             ).first()
             
             stock = request.form.get(f'stock_{size_name}', 0)
-            price = request.form.get(f'price_{size_name}')
             
             if existing:
                 existing.stock = int(stock) if stock else 0
-                existing.price = int(price) if price else None
             else:
                 product_size = ProductSize(
                     product_id=product.id,
                     size=size_name,
-                    stock=int(stock) if stock else 0,
-                    price=int(price) if price else None
+                    stock=int(stock) if stock else 0
                 )
                 db.session.add(product_size)
     

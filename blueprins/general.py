@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session
+from flask import Blueprint, render_template, session,request
 from models.product import Product
 from models.product_image import ProductImage 
 from models.productcolor import ProductColor
@@ -61,7 +61,37 @@ def product_detail(id, name):
     
     product.primary_image = primary_image.image_path if primary_image else None
     
+    colors = ProductColor.query.filter(ProductColor.product_id == id).all()
+    sizes = ProductSize.query.filter(ProductSize.product_id == id).all()
+    images = ProductImage.query.filter(ProductImage.product_id == id).order_by(ProductImage.sort_order).all()
+    
+    product.colors = colors
+    product.sizes = sizes
+    product.images = images
+    
     return render_template('product.html', product=product)
+
+@app.route('/shop')
+def shop():
+    category = request.args.get('category')
+    
+    if category:
+        products = Product.query.filter(Product.active == 1, Product.category == category).all()
+    else:
+        products = Product.query.filter(Product.active == 1).all()
+    
+    for p in products:
+        primary = ProductImage.query.filter(
+            ProductImage.product_id == p.id,
+            ProductImage.is_primary == True
+        ).first()
+        if not primary:
+            primary = ProductImage.query.filter(
+                ProductImage.product_id == p.id
+            ).order_by(ProductImage.sort_order).first()
+        p.primary_image = primary.image_path if primary else None
+    
+    return render_template('shop.html', products=products)
 
 @app.route('/about')
 def about():

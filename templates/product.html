@@ -25,7 +25,7 @@
         </div>
 
         <div class="thumbnail-description-box">
-            <h5>📋 توضیحات کوتاه</h5>
+            <h5>توضیحات کوتاه</h5>
             <p>{{ product.short_description or 'این محصول با کیفیت بالا و طراحی منحصر‌به‌فرد، انتخابی عالی برای استایل روزمره شماست.' }}</p>
             <div class="tags">
                 <span>#{{ product.category }}</span>
@@ -52,7 +52,7 @@
             <span class="category">دسته‌بندی: {{ product.category }}</span>
         </div>
 
-        <div class="product-price" id="productPrice">{{ product.price }} تومان</div>
+        <div class="product-price" id="productPrice">{{ "{:,}".format(product.price).replace(',', '٬') }} تومان</div>
 
         <div class="product-description">
             <h4>توضیحات:</h4>
@@ -61,7 +61,7 @@
 
         <form method="post" action="/add-to-cart" class="add-to-cart-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <input type="hidden" name="id" value="{{ product.id }}">
 
             <div class="color-section">
                 <label>انتخاب رنگ:</label>
@@ -69,7 +69,6 @@
                     {% for color in product.colors %}
                     {% if color.stock > 0 %}
                     <button type="button" class="color-btn" data-color-id="{{ color.id }}"
-                        data-color-price="{{ color.price or product.price }}"
                         style="background: #{{ color.color_code }};"
                         onclick="selectColor(this, '#{{ color.color_code }}', {{ color.price or product.price }})">
                     </button>
@@ -89,8 +88,7 @@
                     {% for size in product.sizes %}
                     {% if size.stock > 0 %}
                     <button type="button" class="size-btn" data-size-id="{{ size.id }}"
-                        data-size-price="{{ size.price or product.price }}"
-                        onclick="selectSize(this, {{ size.price or product.price }})">
+                        onclick="selectSize(this)">
                         {{ size.size }}
                     </button>
                     {% else %}
@@ -117,8 +115,10 @@
 
 <script>
     let basePrice = {{ product.price }};
-    let selectedColorPrice = null;
-    let selectedSizePrice = null;
+
+    function formatPrice(price) {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "٬");
+    }
 
     function changeImage(src) {
         document.getElementById('mainImage').src = src;
@@ -129,30 +129,15 @@
         btn.classList.add('active');
         document.getElementById('selectedColor').value = btn.dataset.colorId;
         document.getElementById('selectedColorName').textContent = 'رنگ انتخاب شده: ' + colorCode;
-        selectedColorPrice = price;
-        updatePrice();
+        
+        let finalPrice = price || basePrice;
+        document.getElementById('productPrice').innerHTML = formatPrice(finalPrice) + ' تومان';
     }
 
-    function selectSize(btn, price) {
+    function selectSize(btn) {
         document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         document.getElementById('selectedSize').value = btn.dataset.sizeId;
-        selectedSizePrice = price;
-        updatePrice();
-    }
-
-    function updatePrice() {
-        let finalPrice = basePrice;
-        if (selectedSizePrice !== null) {
-            finalPrice = selectedSizePrice;
-        } else if (selectedColorPrice !== null) {
-            finalPrice = selectedColorPrice;
-        }
-        const priceElement = document.getElementById('productPrice');
-        priceElement.innerHTML = finalPrice.toLocaleString() + ' تومان';
-        priceElement.classList.remove('price-changed');
-        void priceElement.offsetWidth;
-        priceElement.classList.add('price-changed');
     }
 </script>
 

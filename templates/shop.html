@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<title>همه محصولات | فروشگاه اورن</title>
+{% endblock %}
+
+{% block body %}
+
+{% if request.args.get('category') %}
+    <div class="category-title">
+        دسته‌بندی: {{ request.args.get('category') }}
+    </div>
+{% endif %}
+
+<section class="shop-banner" style="background-image: url('/static/image/shop-banner.jpg');">
+    <div class="shop-banner-overlay"></div>
+    <div class="shop-banner-content">
+        <div class="shop-banner-text">
+            <h1>همه <span>محصولات</span></h1>
+            <p>جدیدترین و باکیفیت‌ترین محصولات را در فروشگاه اورن پیدا کنید</p>
+            <div class="shop-banner-search">
+                <input type="text" placeholder="جستجوی محصول..." id="searchInput">
+                <button onclick="searchProducts()">جستجو</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="shop-filters">
+    <div class="filter-container">
+        <div class="filter-group">
+            <label>دسته‌بندی:</label>
+            <select class="filter-select" id="categoryFilter">
+                <option value="all">همه</option>
+                <option value="لباس">لباس</option>
+                <option value="شلوار">شلوار</option>
+                <option value="کفش">کفش</option>
+                <option value="تیشرت">تیشرت</option>
+                <option value="پیراهن">پیراهن</option>
+                <option value="کت">کت</option>
+                <option value="ژاکت">ژاکت</option>
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label>جنسیت:</label>
+            <select class="filter-select" id="genderFilter">
+                <option value="all">همه</option>
+                <option value="male">مردانه</option>
+                <option value="female">زنانه</option>
+                <option value="unisex">مناسب همه</option>
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label>مرتب‌سازی:</label>
+            <select class="filter-select" id="sortFilter">
+                <option value="newest">جدیدترین</option>
+                <option value="price-low">قیمت: کم به زیاد</option>
+                <option value="price-high">قیمت: زیاد به کم</option>
+                <option value="popular">محبوب‌ترین</option>
+            </select>
+        </div>
+        
+        <button class="filter-reset" onclick="resetFilters()">حذف فیلترها</button>
+    </div>
+</section>
+
+<section class="shop-products">
+    <div class="shop-products-grid" id="productsGrid">
+        {% for p in products|reverse %}
+        <div class="shop-product-card" 
+             data-category="{{ p.category }}" 
+             data-gender="{{ p.gender }}"
+             data-price="{{ p.price }}"
+             data-name="{{ p.name }}">
+            <div class="shop-product-image">
+                <img src="/static/cover/{{ p.primary_image }}" alt="{{ p.name }}">
+                {% if p.view_count and p.view_count > 50 %}
+                <span class="product-badge popular">پرطرفدار</span>
+                {% elif loop.index <= 3 %}
+                <span class="product-badge new">جدید</span>
+                {% endif %}
+            </div>
+            <div class="shop-product-info">
+                <span class="shop-product-category">{{ p.category }}</span>
+                <h4>{{ p.name }}</h4>
+                <div class="shop-product-meta">
+                    <span class="shop-product-gender">
+                        {% if p.gender == 'male' %}مردانه
+                        {% elif p.gender == 'female' %}زنانه
+                        {% else %}مناسب همه{% endif %}
+                    </span>
+                </div>
+                <div class="shop-product-actions">
+                    <p class="shop-product-price">{{ "{:,}".format(p.price).replace(',', '٬') }} <span>تومان</span></p>
+                    <a href="/product/{{ p.id }}/{{ p.name }}" class="shop-product-btn">
+                        <img src="/static/image/product2.png" alt="مشاهده">
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryFilter = document.getElementById('categoryFilter');
+    const genderFilter = document.getElementById('genderFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    const searchInput = document.getElementById('searchInput');
+    const productsGrid = document.getElementById('productsGrid');
+    const productCards = Array.from(document.querySelectorAll('.shop-product-card'));
+    
+    function filterAndSortProducts() {
+        const category = categoryFilter.value;
+        const gender = genderFilter.value;
+        const sort = sortFilter.value;
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        
+        let filtered = productCards.filter(card => {
+            const cardCategory = card.dataset.category;
+            const cardGender = card.dataset.gender;
+            const cardName = card.dataset.name.toLowerCase();
+            
+            const categoryMatch = category === 'all' || cardCategory === category;
+            const genderMatch = gender === 'all' || cardGender === gender;
+            const searchMatch = searchTerm === '' || cardName.includes(searchTerm);
+            
+            return categoryMatch && genderMatch && searchMatch;
+        });
+        
+        if (sort === 'price-low') {
+            filtered.sort((a, b) => parseFloat(a.dataset.price) - parseFloat(b.dataset.price));
+        } else if (sort === 'price-high') {
+            filtered.sort((a, b) => parseFloat(b.dataset.price) - parseFloat(a.dataset.price));
+        }
+        
+        productsGrid.innerHTML = '';
+        if (filtered.length === 0) {
+            productsGrid.innerHTML = '<div class="no-products">محصولی یافت نشد</div>';
+        } else {
+            filtered.forEach(card => {
+                productsGrid.appendChild(card);
+            });
+        }
+    }
+    
+    categoryFilter.addEventListener('change', filterAndSortProducts);
+    genderFilter.addEventListener('change', filterAndSortProducts);
+    sortFilter.addEventListener('change', filterAndSortProducts);
+    searchInput.addEventListener('input', filterAndSortProducts);
+});
+
+function resetFilters() {
+    document.getElementById('categoryFilter').value = 'all';
+    document.getElementById('genderFilter').value = 'all';
+    document.getElementById('sortFilter').value = 'newest';
+    document.getElementById('searchInput').value = '';
+    
+    const event = new Event('change');
+    document.getElementById('categoryFilter').dispatchEvent(event);
+    document.getElementById('genderFilter').dispatchEvent(event);
+    document.getElementById('sortFilter').dispatchEvent(event);
+    document.getElementById('searchInput').dispatchEvent(new Event('input'));
+}
+
+function searchProducts() {
+    document.getElementById('searchInput').dispatchEvent(new Event('input'));
+}
+</script>
+
+{% endblock %}

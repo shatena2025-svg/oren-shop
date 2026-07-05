@@ -30,20 +30,20 @@
     <section class="nav-bar">
         <div class="nav-container" id="navMenu">
             <div class="nav-box">
+                <img src="/static/image/home_icon.png">
+                <a href="/">صفحه ی اصلی</a>
+            </div>
+            <div class="nav-box">
                 <img src="/static/image/category.png">
                 <a href="#">دسته بندی</a>
             </div>
             <div class="nav-box">
                 <img src="/static/image/product.png">
-                <a href="#">صفحه محصولات</a>
+                <a href="/shop">صفحه محصولات</a>
             </div>
             <div class="nav-box">
                 <img src="/static/image/about.png">
-                <a href="#">درباره ما</a>
-            </div>
-            <div class="nav-box">
-                <img src="/static/image/search.png">
-                <a href="#">سرچ</a>
+                <a href="/about">درباره ما</a>
             </div>
         </div>
         <button class="hamburger-menu">
@@ -52,9 +52,9 @@
             <span></span>
         </button>
         <div class="nav-button">
-            <button class="login-btn">
+            <button class="login-btn" onclick="window.location.href='/user/login'">
                 <img src="/static/image/prof-icon.png">
-                <h4>ورود</h4>
+                <h4>ورود/ثبت نام</h4>
             </button>
             <button class="cart-btn">
                 <img src="/static/image/icon-cart.png">

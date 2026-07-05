@@ -1,32 +1,84 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<title> ورود | ثبت نام کاربران </title>
+<title>ورود | ثبت نام کاربران</title>
 {% endblock %}
 
 {% block body %}
 
-<h1>ثبت نام</h1>
-<form action="#" method="post">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-    <input type="hidden" name="register" value="1">
-    <input type="text" name="username" placeholder="username"><br>
-    <input type="password" name="password" placeholder="password"><br>
-    <input type="text" name="phone" placeholder="phone"><br>
-    <input type="text" name="address" placeholder="address"><br>
-    <input type="submit" value="ثبت">
-</form>
-
-{%  for m in get_flashed_messages()  %}
-{{ m }}
+{% for m in get_flashed_messages() %}
+    <div class="flash-messages">{{ m }}</div>
 {% endfor %}
 
-<h1>ورود</h1>
-<form action="#" method="post">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-    <input type="text" name="username" placeholder="username"><br>
-    <input type="password" name="password" placeholder="password"><br>
-    <input type="submit" value="ثبت">
-</form>
+<div class="login-form" id="login-form">
+    <h1>ورود</h1>
+    <form class="login" action="#" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        
+        <div class="input-login">
+            <label>نام کاربری</label>
+            <input type="text" name="username" placeholder="username" required>
+        </div>
+        
+        <div class="input-login">
+            <label>رمز عبور</label>
+            <input type="password" name="password" placeholder="password" required>
+        </div>
+        
+        <input type="submit" value="ورود">
+    </form>
+    
+    <a class="toggle-link" onclick="toggleForms('login-form', 'register-form')">
+        ثبت نام نکردی؟ کلیک کن
+    </a>
+</div>
+
+<div class="register-form" id="register-form" style="display:none;">
+    <h1>ثبت نام</h1>
+    <form class="register" action="#" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="hidden" name="register" value="1">
+        
+        <div class="input-login">
+            <label>نام کاربری</label>
+            <input type="text" name="username" placeholder="username" required>
+        </div>
+        
+        <div class="input-login">
+            <label>رمز عبور</label>
+            <input type="password" name="password" placeholder="password" required>
+        </div>
+        
+        <div class="input-login">
+            <label>شماره تماس</label>
+            <input type="text" name="phone" placeholder="phone" required>
+        </div>
+        
+        <div class="input-login">
+            <label>آدرس</label>
+            <input type="text" name="address" placeholder="address">
+        </div>
+        
+        <input type="submit" value="ثبت نام">
+    </form>
+    
+    <a class="toggle-link" onclick="toggleForms('register-form', 'login-form')">
+        قبلا ثبت نام کردی؟ کلیک کن
+    </a>
+</div>
+
+<script>
+function toggleForms(hideId, showId) {
+    document.getElementById(hideId).style.display = 'none';
+    document.getElementById(showId).style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.querySelectorAll('.toggle-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+    });
+});
+</script>
 
 {% endblock %}
